@@ -6,26 +6,13 @@
     tools:context=".MenuActivity">
 
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="600dp"
-        android:id="@+id/imageView4"
-        android:layout_x="0dp"
-        android:layout_y="0dp"
-        android:background="#ffffff"
-        android:adjustViewBounds="false"
-        android:focusable="false"
-        android:visibility="visible"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:elevation="5dp" />
-
     <ScrollView
 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:fillViewport="true"
+        android:id="@+id/scroll_view"
 
        >
         <RelativeLayout
@@ -137,6 +124,34 @@
                 android:src="#f80d0d"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="600dp"
+                android:id="@+id/imageView4"
+                android:layout_x="0dp"
+                android:layout_y="0dp"
+                android:background="#ffffff"
+                android:adjustViewBounds="false"
+                android:focusable="false"
+                android:visibility="visible"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:elevation="4dp"
+                android:clickable="true" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"
+                android:id="@+id/imageDetail"
+                android:layout_alignParentStart="false"
+                android:background="#ffffff"
+                android:visibility="invisible"
+                android:layout_alignParentTop="true"
+                android:elevation="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp" />
 
 
         </RelativeLayout>

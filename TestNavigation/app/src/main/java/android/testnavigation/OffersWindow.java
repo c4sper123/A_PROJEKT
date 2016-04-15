@@ -68,6 +68,7 @@ public class OffersWindow extends Fragment{
             @Override
             public void onClick(View v) {
                 offersData.removeAll(offersData);
+                //offersData.clear();
                 loadOffers(BackendlessSettings.urlJsonObjId);
             }
         });
@@ -99,7 +100,7 @@ public class OffersWindow extends Fragment{
             TextView priceText = (TextView) itemView.findViewById(R.id.offerPriceTxt);
             priceText.setText("" + currentOffer.getPrice().toString() + " €");
             ImageView iconView = (ImageView) itemView.findViewById(R.id.imageView);
-            iconView.setScaleType(ImageView.ScaleType.FIT_XY);
+            iconView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             UrlImageViewHelper.setUrlDrawable(iconView, currentOffer.getImageUrl());
             TextView localityText = (TextView) itemView.findViewById(R.id.offerPlaceTxt);
             localityText.setText("   Miesto: " + currentOffer.getLocality());
