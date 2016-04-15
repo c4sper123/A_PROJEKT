@@ -1,5 +1,6 @@
 package android.testnavigation;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.app.ProgressDialog;
@@ -10,7 +11,9 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +37,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class OffersWindow extends Fragment {
+public class OffersWindow extends Fragment{
 
     private ArrayList<Offer> offersData = new ArrayList<>();
     private static String TAG = OffersWindow.class.getSimpleName();
@@ -42,8 +45,8 @@ public class OffersWindow extends Fragment {
     private String userId;
     private AlertDialog.Builder myAlert;
     private View rootView;
-    private TextView titleName;
     private ImageButton refreshBtn;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
@@ -56,15 +59,20 @@ public class OffersWindow extends Fragment {
         pDialog.setMessage("Prosím čakajte...");
         pDialog.setCancelable(false);
 
-        refreshBtn = (ImageButton)inflater.inflate(R.layout.app_bar_main, null).findViewById(R.id.refreshBtn);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        loadOffers(BackendlessSettings.urlJsonObj);
+
+        refreshBtn= (ImageButton) toolbar.findViewById(R.id.refreshBtn);
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadOffers(BackendlessSettings.urlJsonObj);
+                offersData.removeAll(offersData);
+                loadOffers(BackendlessSettings.urlJsonObjId);
             }
         });
 
-        loadOffers(BackendlessSettings.urlJsonObj);
+
         return rootView;
     }
 
@@ -98,16 +106,13 @@ public class OffersWindow extends Fragment {
 
 
 
-//            TextView detailsText = (TextView) itemView.findViewById(R.id.offerDetailsTxt);
-//            detailsText.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(OffersWindow.this,OfferDetailsWindow.class);
-//                    intent.putExtra("objectId",currentOffer.getObjectId());
-//                    startActivity(intent);
-//                }
-//            });
-
+            TextView detailsText = (TextView) itemView.findViewById(R.id.offerDetailsTxt);
+            detailsText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCallback.passData(currentOffer.getObjectId());
+                }
+            });
 
             return itemView;
         }
@@ -188,5 +193,22 @@ public class OffersWindow extends Fragment {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+
+    DataPassListener mCallback;
+    public interface DataPassListener{
+        public void passData(String data);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Make sure that container activity implement the callback interface
+        try {
+            mCallback = (DataPassListener)activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(" must implement DataPassListener");
+        }
+    }
+
 }
 

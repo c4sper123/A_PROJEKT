@@ -21,25 +21,25 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-        private Toolbar toolbar;
-        private TextView titleName;
-        private ImageButton refreshBtn;
+        implements NavigationView.OnNavigationItemSelectedListener, OffersWindow.DataPassListener {
+    private Toolbar toolbar;
+    private TextView titleName;
+    private ImageButton refreshBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         android.support.v4.app.Fragment fragment = new OffersWindow();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.offers_window, fragment);
+        ft.replace(R.id.container_omg, fragment);
         ft.commit();
-
 
 
         titleName = (TextView) findViewById(R.id.textView5);
@@ -68,6 +68,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        //menu.getItem(R.id.details).setVisible(false);
         return true;
     }
 
@@ -77,15 +78,13 @@ public class MenuActivity extends AppCompatActivity
 
         if (id == R.id.info) {
 
-        }
-        else if(id == R.id.bug_report){
+        } else if (id == R.id.bug_report) {
 
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -97,26 +96,36 @@ public class MenuActivity extends AppCompatActivity
             titleName.setText("PONUKY");
             android.support.v4.app.Fragment fragment = new OffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.offers_window, fragment);
+            ft.replace(R.id.container_omg, fragment);
             ft.commit();
-        } else if(id == R.id.my_offers){
+        } else if (id == R.id.my_offers) {
             titleName.setText("MOJE PONUKY");
-        } else if(id == R.id.summer){
+        } else if (id == R.id.summer) {
             titleName.setText("LETO");
-        } else if(id == R.id.winter){
+        } else if (id == R.id.winter) {
             titleName.setText("ZIMA");
-        } else if(id == R.id.logout){
+        } else if (id == R.id.logout) {
             finish();
         }
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void passData(String data) {
+        android.support.v4.app.Fragment fragment = new OfferDetailsWindow();
+        Bundle args = new Bundle();
+        args.putString(OfferDetailsWindow.DATA_RECEIVE, data);
+        fragment.setArguments(args);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container_omg, fragment);
+        ft.commit();
     }
 }

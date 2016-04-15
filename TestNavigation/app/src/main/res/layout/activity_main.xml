@@ -13,9 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-    <include layout="@layout/activity_offers_window">
 
-    </include>
+
+
+     <FrameLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:id="@+id/container_omg"
+         android:layout_marginTop="50dp">
+
+     </FrameLayout>
+
+
+
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -27,4 +38,9 @@
         app:menu="@menu/activity_main_drawer"
         app:elevation="4dp" />
 
+
+
 </android.support.v4.widget.DrawerLayout>
+
+
+

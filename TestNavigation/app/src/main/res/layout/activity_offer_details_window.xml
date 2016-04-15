@@ -1,0 +1,146 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/offer_detail_window_omg"
+    tools:context=".MenuActivity">
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="600dp"
+        android:id="@+id/imageView4"
+        android:layout_x="0dp"
+        android:layout_y="0dp"
+        android:background="#ffffff"
+        android:adjustViewBounds="false"
+        android:focusable="false"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:elevation="5dp" />
+
+    <ScrollView
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+
+       >
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+
+            >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/textView3"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/offerDetail"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="DETAIL:"
+                android:textStyle="bold"
+                android:id="@+id/offerDetail"
+                android:layout_below="@+id/imageView3"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="22dp" />
+
+            <ImageView
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView3"
+                android:src="#000000"
+                android:layout_below="@+id/buyBtn"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="19dp" />
+
+            <Button
+                android:layout_width="314dp"
+                android:layout_height="wrap_content"
+                android:text="KÚPIŤ ZA "
+                android:id="@+id/buyBtn"
+                android:background="@android:color/holo_orange_dark"
+                android:layout_x="35dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_y="417dp"
+                android:layout_below="@+id/offerDateTxt"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="19dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="52dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="30.3. - 4.4."
+                android:id="@+id/offerDateTxt"
+                android:layout_x="0dp"
+                android:layout_y="345dp"
+                android:textSize="30sp"
+                android:autoText="true"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:background="#4d4444"
+                android:layout_below="@+id/textView4"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="TERMÍN:"
+                android:id="@+id/textView4"
+                android:layout_x="0dp"
+                android:textSize="25sp"
+                android:layout_y="310dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/darker_gray"
+                android:background="#4d4444"
+                android:layout_below="@+id/offerNameTxt"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/offerNameTxt"
+                android:layout_x="0dp"
+                android:layout_y="251dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:background="#e5d6d6"
+                android:layout_below="@+id/imageView"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true" />
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:id="@+id/imageView"
+                android:layout_y="0dp"
+                android:layout_x="65dp"
+                android:src="#f80d0d"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
