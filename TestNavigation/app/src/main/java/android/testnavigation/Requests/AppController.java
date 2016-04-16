@@ -1,4 +1,4 @@
-package android.testnavigation;
+package android.testnavigation.Requests;
 
 import android.app.Application;
 import android.text.TextUtils;

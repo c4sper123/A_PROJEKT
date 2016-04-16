@@ -4,19 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.testnavigation.AppController;
+import android.testnavigation.Requests.AppController;
 import android.testnavigation.BackendlessSettings;
-import android.testnavigation.JsonObjectIdRequest;
+import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.Offer;
 import android.testnavigation.R;
 import android.util.Log;
@@ -52,7 +47,7 @@ public class SummerOffersWindow extends Fragment{
     private View rootView;
     private ImageButton refreshBtn;
     private Toolbar toolbar;
-   // private DataPassListener mCallback;
+    private DataPassListener mCallback;
     private TextView titleName;
 
     @Nullable
@@ -121,7 +116,7 @@ public class SummerOffersWindow extends Fragment{
             detailsText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //mCallback.passData(currentOffer.getObjectId());
+                    mCallback.passData(currentOffer.getObjectId());
                 }
             });
 
@@ -205,20 +200,15 @@ public class SummerOffersWindow extends Fragment{
             pDialog.dismiss();
     }
 
-
-//    public interface DataPassListener{
-//        void passData(String data);
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        // Make sure that container activity implement the callback interface
-//        try {
-//            mCallback = (DataPassListener)activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(" must implement DataPassListener");
-//        }
-//    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Make sure that container activity implement the callback interface
+        try {
+            mCallback = (DataPassListener)activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(" must implement DataPassListener");
+        }
+    }
 }
 

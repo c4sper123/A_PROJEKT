@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.testnavigation">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
-        android:name=".AppController"
+        android:name=".Requests.AppController"
         android:allowBackup="true"
         android:label="Zľavový portáľ"
         android:theme="@style/AppTheme.NoActionBar">
@@ -17,10 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MenuActivity"/>
-
+        <activity android:name=".MenuActivity" />
+        <activity
+            android:name=".EditOfferScreen"
+            android:label="@string/title_activity_edit_offer_screen"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
-
 
 </manifest>

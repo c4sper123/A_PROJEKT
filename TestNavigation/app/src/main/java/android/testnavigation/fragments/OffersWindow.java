@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.testnavigation.AppController;
+import android.testnavigation.Requests.AppController;
 import android.testnavigation.BackendlessSettings;
-import android.testnavigation.JsonObjectIdRequest;
+import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.Offer;
 import android.testnavigation.R;
 import android.util.Log;
@@ -202,9 +202,6 @@ public class OffersWindow extends Fragment{
     }
 
 
-    public interface DataPassListener{
-        void passData(String data);
-    }
 
     @Override
     public void onAttach(Activity activity) {

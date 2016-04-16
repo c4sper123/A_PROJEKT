@@ -1,4 +1,6 @@
-package android.testnavigation;
+package android.testnavigation.Requests;
+
+import android.testnavigation.BackendlessSettings;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;

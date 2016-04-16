@@ -1,18 +1,15 @@
 package android.testnavigation.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
-import android.testnavigation.AppController;
+import android.testnavigation.Requests.AppController;
 import android.testnavigation.BackendlessSettings;
-import android.testnavigation.JsonObjectIdRequest;
+import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.R;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;

@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -66,6 +67,10 @@ public class LoginWindow extends Activity {
                 //login
                 else {
                     if (isConnectedToInternet()) {
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+
                         pDialog.show();
                         Backendless.UserService.login(userName, password, new AsyncCallback<BackendlessUser>() {
                             @Override

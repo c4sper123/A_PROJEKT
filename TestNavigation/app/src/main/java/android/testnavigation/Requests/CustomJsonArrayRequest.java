@@ -1,19 +1,21 @@
-package android.testnavigation;
+package android.testnavigation.Requests;
+
+
+import android.testnavigation.BackendlessSettings;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonObjectIdRequest extends JsonObjectRequest
+public class CustomJsonArrayRequest extends JsonArrayRequest
 {
-    public JsonObjectIdRequest(int method, String url, JSONObject jsonRequest, Response.Listener listener, Response.ErrorListener errorListener)
-    {
-        super(method, url, jsonRequest, listener, errorListener);
+    public CustomJsonArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        super(url, listener, errorListener);
     }
 
     @Override

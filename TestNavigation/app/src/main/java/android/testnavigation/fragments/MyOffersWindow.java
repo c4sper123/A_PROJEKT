@@ -1,23 +1,19 @@
 package android.testnavigation.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.testnavigation.AppController;
+import android.testnavigation.Requests.AppController;
 import android.testnavigation.BackendlessSettings;
-import android.testnavigation.DeleteObjectIdRequest;
-import android.testnavigation.JsonObjectIdRequest;
+import android.testnavigation.Requests.DeleteObjectIdRequest;
+import android.testnavigation.EditOfferScreen;
+import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.Offer;
 import android.testnavigation.R;
 import android.util.Log;
@@ -35,7 +31,6 @@ import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.StringRequest;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import org.json.JSONArray;
@@ -57,6 +52,7 @@ public class MyOffersWindow extends Fragment {
     private ImageButton deleteBtn;
     private TextView titleName;
     public String objeeectId;
+    private ImageButton editBtn;
 
     @Nullable
     @Override
@@ -114,7 +110,7 @@ public class MyOffersWindow extends Fragment {
             View itemView = getActivity().getLayoutInflater().inflate(R.layout.my_offer_view, null);
 
             final Offer currentOffer = offersData.get(position);
-
+            objeeectId = currentOffer.getObjectId();
 
             TextView nameText = (TextView) itemView.findViewById(R.id.offerNameTxt);
             nameText.setText(currentOffer.getName());
@@ -127,6 +123,16 @@ public class MyOffersWindow extends Fragment {
             localityText.setIncludeFontPadding(false);
             localityText.setText("  Miesto: " + currentOffer.getLocality());
 
+            editBtn = (ImageButton) itemView.findViewById(R.id.editButton);
+            editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), EditOfferScreen.class);
+                    intent.putExtra("objectId", objeeectId);
+                    startActivity(intent);
+                }
+            });
+
             deleteBtn = (ImageButton) itemView.findViewById(R.id.deleteButton);
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,7 +143,7 @@ public class MyOffersWindow extends Fragment {
                     myAlert.setNegativeButton("Vymazať", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            objeeectId = currentOffer.getObjectId();
+
                             deleteOffer(objeeectId, BackendlessSettings.urlJsonObjId);
                             dialog.dismiss();
                         }
@@ -235,21 +241,6 @@ public class MyOffersWindow extends Fragment {
             pDialog.dismiss();
     }
 
-//    DataPassListener mCallback;
-//    public interface DataPassListener{
-//        public void passData(String data);
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        // Make sure that container activity implement the callback interface
-//        try {
-//            mCallback = (DataPassListener)activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(" must implement DataPassListener");
-//        }
-//    }
 
     private void deleteOffer(String objectId, String URL) {
 

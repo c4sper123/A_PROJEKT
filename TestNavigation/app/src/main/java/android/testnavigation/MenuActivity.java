@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.testnavigation.fragments.DataPassListener;
 import android.testnavigation.fragments.MyOffersWindow;
 import android.testnavigation.fragments.OfferDetailsWindow;
 import android.testnavigation.fragments.OffersWindow;
@@ -21,7 +22,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OffersWindow.DataPassListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DataPassListener {
     private Toolbar toolbar;
     private TextView titleName;
     private ImageButton refreshBtn;
