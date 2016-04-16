@@ -1,19 +1,19 @@
-package android.testnavigation;
+package android.testnavigation.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.testnavigation.AppController;
+import android.testnavigation.BackendlessSettings;
+import android.testnavigation.JsonObjectIdRequest;
+import android.testnavigation.Offer;
+import android.testnavigation.R;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +54,7 @@ public class OffersWindow extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rootView = inflater.inflate(R.layout.activity_offers_window, container, false);
+        rootView = inflater.inflate(R.layout.fragment_offers_window, container, false);
         myAlert = new AlertDialog.Builder(getContext());
 
         pDialog = new ProgressDialog(this.getContext());

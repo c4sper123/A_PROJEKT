@@ -1,4 +1,4 @@
-package android.testnavigation;
+package android.testnavigation.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.testnavigation.AppController;
+import android.testnavigation.BackendlessSettings;
+import android.testnavigation.JsonObjectIdRequest;
+import android.testnavigation.R;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,7 +47,7 @@ public class OfferDetailsWindow extends Fragment {
     private ImageView imageDetail;
     private AlertDialog.Builder myAlert;
     private ImageButton refreshBtn;
-    final static String DATA_RECEIVE = "data_receive";
+    public final static String DATA_RECEIVE = "data_receive";
     private Toolbar toolbar;
     private Button buyBtn;
     private View rootView;
