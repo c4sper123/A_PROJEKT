@@ -33,7 +33,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="105dp"
         android:background="#eeeeee"
-        android:layout_alignParentEnd="true" />
+        android:layout_toStartOf="@+id/editButton" />
 
     <TextView
         android:layout_width="match_parent"
@@ -49,20 +49,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Price"
-        android:id="@+id/offerPriceTxt"
-        android:layout_marginRight="5dp"
-        android:textColor="#FC6500"
-        android:gravity="right"
-        android:textStyle="bold"
-        android:background="#eeeeee"
-        android:layout_above="@+id/offerPlaceTxt"
-        android:layout_alignEnd="@+id/offerNameTxt"></TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Zobraziť viac"
         android:id="@+id/offerDetailsTxt"
@@ -74,8 +60,27 @@
         android:layout_above="@+id/offerPlaceTxt"
         android:layout_alignStart="@+id/offerNameTxt" />
 
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/deleteButton"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="0dp"
+        android:src="@mipmap/ic_delete"
+        android:layout_below="@+id/editButton"
+        android:layout_alignParentEnd="true"
+        android:background="#000000"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentTop="false" />
 
-
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/editButton"
+        android:src="@mipmap/ic_edit"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="#000000" />
 
 
 </RelativeLayout>

@@ -46,7 +46,7 @@ public class LoginWindow extends Activity {
         logButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userName = userNameTxt.getText().toString();
+                final String userName = userNameTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
 
                 if(userName.isEmpty())
@@ -71,8 +71,11 @@ public class LoginWindow extends Activity {
                             @Override
                             public void handleResponse(BackendlessUser backendlessUser) {
                                 String userId = backendlessUser.getObjectId();
+                                String userMail = backendlessUser.getEmail();
                                 Toast.makeText(getApplicationContext(), "Logged in!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginWindow.this, MenuActivity.class);
+                                intent.putExtra("userMail", userMail);
+                                intent.putExtra("userName", userName);
                                 intent.putExtra("userId", userId); //passing data to another activity - vyuzitie pri MOJE PONUKY
                                 pDialog.dismiss();
                                 startActivity(intent);

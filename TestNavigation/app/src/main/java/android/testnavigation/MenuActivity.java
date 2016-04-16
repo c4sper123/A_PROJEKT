@@ -1,6 +1,7 @@
 package android.testnavigation;
 
 import android.app.Fragment;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.text.Layout;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 
@@ -20,17 +23,27 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OffersWindow.DataPassListener {
     private Toolbar toolbar;
     private TextView titleName;
     private ImageButton refreshBtn;
+    private String userId;
+    private String userName;
+    private String userMail;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        userId = getIntent().getStringExtra("userId");
+        userName = getIntent().getStringExtra("userName");
+        userMail = getIntent().getStringExtra("userMail");
+        Log.d("WAU",userMail + " " + userName);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -40,6 +53,13 @@ public class MenuActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container_omg, fragment);
         ft.commit();
+
+//        View v = findViewById(R.id.nav_view);
+//        TextView  txtUserName = (TextView) v.findViewById(R.id.txtUserName);
+//        txtUserName.setText(userName);
+//        TextView txtUserMail = (TextView) v.findViewById(R.id.txtUserMail);
+//        txtUserMail.setText(userMail);
+        //nejde
 
 
         titleName = (TextView) findViewById(R.id.textView5);
@@ -100,6 +120,13 @@ public class MenuActivity extends AppCompatActivity
             ft.commit();
         } else if (id == R.id.my_offers) {
             titleName.setText("MOJE PONUKY");
+            android.support.v4.app.Fragment fragment = new MyOffersWindow();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Bundle bundle = new Bundle();
+            bundle.putString("userId", userId);
+            fragment.setArguments(bundle);
+            ft.replace(R.id.container_omg, fragment);
+            ft.commit();
         } else if (id == R.id.summer) {
             titleName.setText("LETO");
         } else if (id == R.id.winter) {
