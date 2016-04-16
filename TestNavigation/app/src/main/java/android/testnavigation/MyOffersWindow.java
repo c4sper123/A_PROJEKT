@@ -52,7 +52,7 @@ public class MyOffersWindow extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_my_offers_window, container, false);
+        rootView = inflater.inflate(R.layout.fragment_my_offers_window, container, false);
         myAlert = new AlertDialog.Builder(getContext());
 
         pDialog = new ProgressDialog(this.getContext());
@@ -112,17 +112,16 @@ public class MyOffersWindow extends Fragment{
             iconView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             UrlImageViewHelper.setUrlDrawable(iconView, currentOffer.getImageUrl());
             TextView localityText = (TextView) itemView.findViewById(R.id.offerPlaceTxt);
-            localityText.setText("   Miesto: " + currentOffer.getLocality());
+            localityText.setIncludeFontPadding(false);
+            localityText.setText("  Miesto: " + currentOffer.getLocality());
+
+
 
 
 
             TextView detailsText = (TextView) itemView.findViewById(R.id.offerDetailsTxt);
-            detailsText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   // mCallback.passData(currentOffer.getObjectId());
-                }
-            });
+            detailsText.setVisibility(View.INVISIBLE);
+            detailsText.setClickable(false);
 
             return itemView;
         }
@@ -218,6 +217,8 @@ public class MyOffersWindow extends Fragment{
 //            throw new ClassCastException(" must implement DataPassListener");
 //        }
 //    }
+
+
 
 }
 

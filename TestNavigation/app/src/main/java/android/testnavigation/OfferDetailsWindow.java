@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -45,6 +46,7 @@ public class OfferDetailsWindow extends Fragment {
     final static String DATA_RECEIVE = "data_receive";
     private Toolbar toolbar;
     private Button buyBtn;
+    private View rootView;
 
 
 
@@ -52,7 +54,7 @@ public class OfferDetailsWindow extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rootView = inflater.inflate(R.layout.activity_offer_details_window, container, false);
+        rootView = inflater.inflate(R.layout.activity_offer_details_window, container, false);
         myAlert = new AlertDialog.Builder(this.getContext());
 
         ImageView imgWhite = (ImageView) rootView.findViewById(R.id.imageView4);
@@ -302,4 +304,6 @@ public class OfferDetailsWindow extends Fragment {
             }
         });
     }
+
+
 }

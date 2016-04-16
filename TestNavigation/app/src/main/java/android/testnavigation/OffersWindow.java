@@ -47,12 +47,13 @@ public class OffersWindow extends Fragment{
     private View rootView;
     private ImageButton refreshBtn;
     private Toolbar toolbar;
+    private DataPassListener mCallback;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rootView = inflater.inflate(R.layout.activity_offers_window, container, false);
+        rootView = inflater.inflate(R.layout.activity_offers_window, container, false);
         myAlert = new AlertDialog.Builder(getContext());
 
         pDialog = new ProgressDialog(this.getContext());
@@ -103,7 +104,8 @@ public class OffersWindow extends Fragment{
             iconView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             UrlImageViewHelper.setUrlDrawable(iconView, currentOffer.getImageUrl());
             TextView localityText = (TextView) itemView.findViewById(R.id.offerPlaceTxt);
-            localityText.setText("   Miesto: " + currentOffer.getLocality());
+            localityText.setIncludeFontPadding(false);
+            localityText.setText("  Miesto: " + currentOffer.getLocality());
 
 
 
@@ -195,9 +197,9 @@ public class OffersWindow extends Fragment{
             pDialog.dismiss();
     }
 
-    DataPassListener mCallback;
+
     public interface DataPassListener{
-        public void passData(String data);
+        void passData(String data);
     }
 
     @Override
@@ -210,6 +212,5 @@ public class OffersWindow extends Fragment{
             throw new ClassCastException(" must implement DataPassListener");
         }
     }
-
 }
 

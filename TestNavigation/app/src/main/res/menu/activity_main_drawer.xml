@@ -22,7 +22,8 @@
             </item>
             <item
                 android:id="@+id/winter"
-                android:title="ZIMA">
+                android:title="ZIMA"
+               >
             </item>
         </menu>
     </item>
@@ -31,9 +32,11 @@
 
     <item
         android:id="@+id/space1"
+        android:enabled="false"
         android:title=""/>
     <item
         android:id="@+id/space2"
+        android:enabled="false"
         android:title=""/>
 
     <item

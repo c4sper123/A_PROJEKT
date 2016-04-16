@@ -103,8 +103,6 @@ public class LoginWindow extends Activity {
                         myAlert.show();
                     }
                 }
-
-
             }
         });
     }
@@ -122,6 +120,11 @@ public class LoginWindow extends Activity {
         return false;
     }
 
-
+//    public boolean isOnline() {
+//        ConnectivityManager cm =
+//                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+//        return netInfo != null && netInfo.isConnectedOrConnecting();
+//    }
 
 }

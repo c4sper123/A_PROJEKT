@@ -54,6 +54,8 @@ public class MenuActivity extends AppCompatActivity
         ft.replace(R.id.container_omg, fragment);
         ft.commit();
 
+
+
 //        View v = findViewById(R.id.nav_view);
 //        TextView  txtUserName = (TextView) v.findViewById(R.id.txtUserName);
 //        txtUserName.setText(userName);
@@ -75,11 +77,20 @@ public class MenuActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
+
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -88,7 +99,6 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        //menu.getItem(R.id.details).setVisible(false);
         return true;
     }
 
@@ -117,6 +127,7 @@ public class MenuActivity extends AppCompatActivity
             android.support.v4.app.Fragment fragment = new OffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_omg, fragment);
+            ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.my_offers) {
             titleName.setText("MOJE PONUKY");
@@ -126,6 +137,7 @@ public class MenuActivity extends AppCompatActivity
             bundle.putString("userId", userId);
             fragment.setArguments(bundle);
             ft.replace(R.id.container_omg, fragment);
+            //ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.summer) {
             titleName.setText("LETO");
@@ -153,6 +165,9 @@ public class MenuActivity extends AppCompatActivity
         fragment.setArguments(args);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container_omg, fragment);
+        ft.addToBackStack(null);
         ft.commit();
     }
+
+
 }

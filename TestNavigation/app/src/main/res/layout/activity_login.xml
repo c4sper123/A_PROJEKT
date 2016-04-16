@@ -45,43 +45,13 @@
 
         </RelativeLayout>
 
-
     </android.support.v7.widget.Toolbar>
 
-        <Button
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="LOGIN"
-            android:id="@+id/loginBtn"
-            android:layout_marginTop="86dp"
-            android:layout_x="86dp"
-            android:layout_y="370dp"
-            android:layout_below="@+id/textView2"
-            android:layout_centerHorizontal="true" />
-
-        <EditText
-            android:layout_width="268dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/userNameTxt"
-            android:layout_x="57dp"
-            android:layout_y="211dp"
-            android:layout_above="@+id/passwordTxt"
-            android:layout_alignStart="@+id/passwordTxt"
-            android:layout_marginBottom="64dp" />
-
-        <EditText
-            android:layout_width="268dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/passwordTxt"
-            android:layout_x="57dp"
-            android:layout_y="294dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="212dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,21 +59,47 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="NAME"
             android:id="@+id/textView"
-            android:layout_x="156dp"
-            android:layout_y="183dp"
-            android:layout_above="@+id/userNameTxt"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="PASSWORD"
-            android:id="@+id/textView2"
-            android:layout_x="131dp"
-            android:layout_y="270dp"
-            android:layout_above="@+id/passwordTxt"
+            android:id="@+id/textView4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="180dp" />
+
+        <EditText
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/userNameTxt"
+            android:inputType="textPersonName"
+            android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true" />
 
+        <EditText
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/passwordTxt"
+            android:layout_below="@+id/textView4"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="LOGIN"
+            android:id="@+id/loginBtn"
+            android:layout_below="@+id/passwordTxt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textSize="20dp"/>
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
