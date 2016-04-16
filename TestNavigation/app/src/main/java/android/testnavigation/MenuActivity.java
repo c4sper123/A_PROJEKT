@@ -121,16 +121,16 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.add_offer) {
-            titleName.setText("PRIDAŤ PONUKU");
+           // titleName.setText("PRIDAŤ PONUKU");
         } else if (id == R.id.offers) {
-            titleName.setText("PONUKY");
+            //titleName.setText("PONUKY");
             android.support.v4.app.Fragment fragment = new OffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_omg, fragment);
             ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.my_offers) {
-            titleName.setText("MOJE PONUKY");
+          //  titleName.setText("MOJE PONUKY");
             android.support.v4.app.Fragment fragment = new MyOffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             Bundle bundle = new Bundle();
@@ -140,9 +140,9 @@ public class MenuActivity extends AppCompatActivity
             //ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.summer) {
-            titleName.setText("LETO");
+           // titleName.setText("LETO");
         } else if (id == R.id.winter) {
-            titleName.setText("ZIMA");
+           // titleName.setText("ZIMA");
         } else if (id == R.id.logout) {
             finish();
         }

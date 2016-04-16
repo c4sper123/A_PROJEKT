@@ -38,7 +38,7 @@ import java.util.Date;
 
 public class OfferDetailsWindow extends Fragment {
     private String objectId;
-    private static String TAG = OffersWindow.class.getSimpleName();
+    private String TAG = this.getClass().getSimpleName();
     private ProgressDialog pDialog;
     private ImageView imageDetail;
     private AlertDialog.Builder myAlert;
@@ -47,6 +47,7 @@ public class OfferDetailsWindow extends Fragment {
     private Toolbar toolbar;
     private Button buyBtn;
     private View rootView;
+    private TextView titleName;
 
 
 
@@ -59,6 +60,7 @@ public class OfferDetailsWindow extends Fragment {
 
         ImageView imgWhite = (ImageView) rootView.findViewById(R.id.imageView4);
         imgWhite.setVisibility(View.VISIBLE);
+
 
         pDialog = new ProgressDialog(this.getContext());
         pDialog.setMessage("Prosím čakajte...");
@@ -73,6 +75,9 @@ public class OfferDetailsWindow extends Fragment {
             //chyba
         }
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        titleName = (TextView) toolbar.findViewById(R.id.textView5);
+        titleName.setText("DETAIL PONUKY");
+
         refreshBtn= (ImageButton) toolbar.findViewById(R.id.refreshBtn);
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override

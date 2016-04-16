@@ -40,7 +40,7 @@ import java.util.ArrayList;
 public class OffersWindow extends Fragment{
 
     private ArrayList<Offer> offersData = new ArrayList<>();
-    private static String TAG = OffersWindow.class.getSimpleName();
+    private String TAG = this.getClass().getSimpleName();
     private ProgressDialog pDialog;
     private String userId;
     private AlertDialog.Builder myAlert;
@@ -48,6 +48,7 @@ public class OffersWindow extends Fragment{
     private ImageButton refreshBtn;
     private Toolbar toolbar;
     private DataPassListener mCallback;
+    private TextView titleName;
 
     @Nullable
     @Override
@@ -61,6 +62,8 @@ public class OffersWindow extends Fragment{
         pDialog.setCancelable(false);
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        titleName = (TextView) toolbar.findViewById(R.id.textView5);
+        titleName.setText("PONUKY");
 
         loadOffers(BackendlessSettings.urlJsonObj);
 
@@ -70,7 +73,7 @@ public class OffersWindow extends Fragment{
             public void onClick(View v) {
                 offersData.removeAll(offersData);
                 //offersData.clear();
-                loadOffers(BackendlessSettings.urlJsonObjId);
+                loadOffers(BackendlessSettings.urlJsonObj);
             }
         });
 
@@ -124,8 +127,9 @@ public class OffersWindow extends Fragment{
     private void loadOffers(String URL) {
 
         showpDialog();
+        Log.d(TAG, "url ka  " + URL);
 
-        final JsonObjectIdRequest jsonObjReq = new JsonObjectIdRequest(Method.GET,URL,null ,new Response.Listener<JSONObject>() {
+        JsonObjectIdRequest jsonObjReq = new JsonObjectIdRequest(Method.GET,URL,null ,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());

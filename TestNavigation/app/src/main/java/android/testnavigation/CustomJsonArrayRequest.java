@@ -21,6 +21,7 @@ public class CustomJsonArrayRequest extends JsonArrayRequest
         Map headers = new HashMap();
         headers.put("application-id", BackendlessSettings.AP_ID);
         headers.put("secret-key", BackendlessSettings.SECRET_KEY);
+        headers.put("application-type","REST");
         return headers;
     }
 

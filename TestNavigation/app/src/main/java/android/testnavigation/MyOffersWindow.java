@@ -29,6 +29,7 @@ import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import org.json.JSONArray;
@@ -37,16 +38,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MyOffersWindow extends Fragment{
+public class MyOffersWindow extends Fragment {
 
     private ArrayList<Offer> offersData = new ArrayList<>();
-    private static String TAG = OffersWindow.class.getSimpleName();
+    private String TAG = this.getClass().getSimpleName();
     private ProgressDialog pDialog;
     private String userId;
     private AlertDialog.Builder myAlert;
     private View rootView;
     private ImageButton refreshBtn;
     private Toolbar toolbar;
+    private ImageButton deleteBtn;
+    private TextView titleName;
+    public String objeeectId;
 
     @Nullable
     @Override
@@ -60,25 +64,27 @@ public class MyOffersWindow extends Fragment{
         pDialog.setCancelable(false);
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        titleName = (TextView) toolbar.findViewById(R.id.textView5);
+        titleName.setText("MOJE PONUKY");
+
 
         Bundle args = getArguments();
         if (args != null) {
             userId = args.getString("userId");
             Log.d(TAG, "user ID: " + userId);
-        }
-        else{
+        } else {
             //chyba
         }
 
         loadMyOffers(BackendlessSettings.urlJsonObj, userId);
 
-        refreshBtn= (ImageButton) toolbar.findViewById(R.id.refreshBtn);
+        refreshBtn = (ImageButton) toolbar.findViewById(R.id.refreshBtn);
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 offersData.removeAll(offersData);
                 //offersData.clear();
-                loadMyOffers(BackendlessSettings.urlJsonObjId, userId);
+                loadMyOffers(BackendlessSettings.urlJsonObj, userId);
             }
         });
 
@@ -86,20 +92,20 @@ public class MyOffersWindow extends Fragment{
         return rootView;
     }
 
-    private void showAllOffers(){
+    private void showAllOffers() {
         ArrayAdapter<Offer> adapter = new MyListAdapter();
         ListView list = (ListView) getView().findViewById(R.id.offersListView);
         list.setAdapter(adapter);
     }
 
-    private class MyListAdapter extends ArrayAdapter<Offer>{
-        public MyListAdapter(){
-            super(getActivity(),R.layout.my_offer_view,offersData);
+    private class MyListAdapter extends ArrayAdapter<Offer> {
+        public MyListAdapter() {
+            super(getActivity(), R.layout.my_offer_view, offersData);
         }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            View itemView = getActivity().getLayoutInflater().inflate(R.layout.my_offer_view,null);
+            View itemView = getActivity().getLayoutInflater().inflate(R.layout.my_offer_view, null);
 
             final Offer currentOffer = offersData.get(position);
 
@@ -115,9 +121,30 @@ public class MyOffersWindow extends Fragment{
             localityText.setIncludeFontPadding(false);
             localityText.setText("  Miesto: " + currentOffer.getLocality());
 
-
-
-
+            deleteBtn = (ImageButton) itemView.findViewById(R.id.deleteButton);
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myAlert.setMessage("Naozaj chcete vymazať túto ponuku?").create();
+                    myAlert.setTitle("Potvrdenie");
+                    myAlert.setIcon(R.drawable.error_icon);
+                    myAlert.setNegativeButton("Vymazať", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            objeeectId = currentOffer.getObjectId();
+                            deleteOffer(objeeectId, BackendlessSettings.urlJsonObjId);
+                            dialog.dismiss();
+                        }
+                    });
+                    myAlert.setPositiveButton("Zrušiť", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    myAlert.show();
+                }
+            });
 
             TextView detailsText = (TextView) itemView.findViewById(R.id.offerDetailsTxt);
             detailsText.setVisibility(View.INVISIBLE);
@@ -131,28 +158,27 @@ public class MyOffersWindow extends Fragment{
 
         showpDialog();
 
-        final JsonObjectIdRequest jsonObjReq = new JsonObjectIdRequest(Method.GET,URL,null ,new Response.Listener<JSONObject>() {
+        JsonObjectIdRequest jsonObjReq = new JsonObjectIdRequest(Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
-                try{
+                try {
                     JSONArray data = response.getJSONArray("data");
 
-                    for(int i=0;i<data.length();i++){
+                    for (int i = 0; i < data.length(); i++) {
                         JSONObject offerObject = (JSONObject) data.get(i);
-                        if(offerObject.getString("ownerId").equals(userId)){
-                        Log.d(TAG, offerObject.getString("name"));
-                        offersData.add(new Offer(offerObject.getString("name"), offerObject.getString("locality"), offerObject.getString("details"),
-                                Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
-                                offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
-                                offerObject.getString("imageUrl"), offerObject.getString("objectId")));
+                        if (offerObject.getString("ownerId").equals(userId)) {
+                            Log.d(TAG, offerObject.getString("name"));
+                            offersData.add(new Offer(offerObject.getString("name"), offerObject.getString("locality"), offerObject.getString("details"),
+                                    Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
+                                    offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
+                                    offerObject.getString("imageUrl"), offerObject.getString("objectId")));
 
                         }
                     }
-                    if(!response.getString("nextPage").equals("null")){
+                    if (!response.getString("nextPage").equals("null")) {
                         loadMyOffers(response.getString("nextPage"), userId);
-                    }
-                    else{
+                    } else {
                         showAllOffers();
                         hidepDialog();
                     }
@@ -179,6 +205,7 @@ public class MyOffersWindow extends Fragment{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        offersData.removeAll(offersData);
                         loadMyOffers(BackendlessSettings.urlJsonObj, userId);
                     }
                 });
@@ -218,7 +245,40 @@ public class MyOffersWindow extends Fragment{
 //        }
 //    }
 
+    private void deleteOffer(String objectId, String URL) {
 
+        showpDialog();
+        URL += objectId;
+        Log.d("URL delete: ", URL);
 
+        DeleteObjectIdRequest stringRequest = new DeleteObjectIdRequest(Method.DELETE, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getContext(),"Ponuka úspešne vymazaná",Toast.LENGTH_SHORT).show();
+                loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+                hidepDialog();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+
+                myAlert.setMessage("Nepodarilo sa vymazať ponuku!").create();
+                myAlert.setTitle("Error");
+                myAlert.setIcon(R.drawable.error_icon);
+                myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        deleteOffer(objeeectId, BackendlessSettings.urlJsonObjId);
+                    }
+                });
+                myAlert.show();
+                hidepDialog();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
 }
-
