@@ -16,8 +16,8 @@ public class JsonObjectIdPutRequest extends JsonObjectRequest
 {
     private Offer offer;
 
-    public JsonObjectIdPutRequest(Offer offer,int method, String url, JSONObject jsonRequest, Response.Listener listener, Response.ErrorListener errorListener) {
-        super(method, url, jsonRequest, listener, errorListener);
+    public JsonObjectIdPutRequest(Offer offer,int method, String url, Response.Listener listener, Response.ErrorListener errorListener) {
+        super(method, url, listener, errorListener);
         this.offer = offer;
     }
 
@@ -34,7 +34,7 @@ public class JsonObjectIdPutRequest extends JsonObjectRequest
     public Map getParams() throws AuthFailureError {
         Map params = new HashMap();
 
-        params.put("endDate",offer.getEndDate());//convert ešte
+        params.put("endDate",offer.getEndDateStamp());//convert ešte
         params.put("locality", offer.getLocality());
         params.put("type", offer.getType());
         params.put("price",offer.getPrice());
@@ -42,7 +42,7 @@ public class JsonObjectIdPutRequest extends JsonObjectRequest
         params.put("name",offer.getName());
         params.put("details",offer.getDetails());
         params.put("maxPeople",offer.getMaxPeople());
-        params.put("startDate", offer.getStartDate());//convert ešte
+        params.put("startDate", offer.getStartDateStamp());//convert ešte
 
         return params;
     }

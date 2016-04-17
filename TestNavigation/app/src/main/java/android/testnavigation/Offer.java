@@ -14,6 +14,8 @@ public class Offer {
     private String imageUrl;
     private Integer maxPeople;
     private String ownerId;
+    private String startDateStamp;
+    private String endDateStamp;
 
     public Offer(String name, String locality, String details,  Integer price,Integer type, String startDate,
                  String endDate, Integer maxPeople, String imageUrl, String objectId) {
@@ -27,6 +29,18 @@ public class Offer {
         this.imageUrl = imageUrl;
         this.maxPeople = maxPeople;
         this.objectId = objectId;
+        this.startDateStamp = startDate;
+        this.endDateStamp = endDate;
+    }
+
+    public String getStartDateStamp(){
+        return startDateStamp;
+    }
+
+
+
+    public String getEndDateStamp(){
+        return endDateStamp;
     }
 
     public String getLocality() {

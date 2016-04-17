@@ -44,8 +44,8 @@ public class MyOffersWindow extends Fragment {
     private ArrayList<Offer> offersData = new ArrayList<>();
     private String TAG = this.getClass().getSimpleName();
     private ProgressDialog pDialog;
-    private String userId;
     private AlertDialog.Builder myAlert;
+    private String userId;
     private View rootView;
     private ImageButton refreshBtn;
     private Toolbar toolbar;

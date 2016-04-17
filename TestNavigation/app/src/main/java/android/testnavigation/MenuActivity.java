@@ -1,5 +1,8 @@
 package android.testnavigation;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentTransaction;
@@ -17,8 +20,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity
@@ -29,6 +36,7 @@ public class MenuActivity extends AppCompatActivity
     private String userId;
     private String userName;
     private String userMail;
+    private AlertDialog.Builder myAlert;
 
 
     @Override
@@ -50,15 +58,7 @@ public class MenuActivity extends AppCompatActivity
         ft.replace(R.id.container_omg, fragment);
         ft.commit();
 
-
-
-//        View v = findViewById(R.id.nav_view);
-//        TextView  txtUserName = (TextView) v.findViewById(R.id.txtUserName);
-//        txtUserName.setText(userName);
-//        TextView txtUserMail = (TextView) v.findViewById(R.id.txtUserMail);
-//        txtUserMail.setText(userMail);
-        //nejde
-
+        myAlert = new AlertDialog.Builder(this);
 
         titleName = (TextView) findViewById(R.id.textView5);
         titleName.setText("PONUKY");
@@ -71,17 +71,13 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
+        View v = navigationView.getHeaderView(0);
 
-//    @Override
-//    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
+        TextView  txtUserName = (TextView) v.findViewById(R.id.txtUserName);
+        txtUserName.setText(userName);
+        TextView txtUserMail = (TextView) v.findViewById(R.id.txtUserMail);
+        txtUserMail.setText(userMail);
+    }
 
     @Override
     public void onBackPressed() {
@@ -103,6 +99,16 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.info) {
+            myAlert.setMessage("Zľavový portál v1.0\n\nby Adrián Kasperkevič & Tomáš Vrtal\n\nMTAA © 2016").create();
+            myAlert.setTitle("Info");
+            myAlert.setIcon(R.drawable.ic_info_black_24dp);
+            myAlert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            myAlert.show();
 
         } else if (id == R.id.bug_report) {
 
@@ -133,7 +139,7 @@ public class MenuActivity extends AppCompatActivity
             bundle.putString("userId", userId);
             fragment.setArguments(bundle);
             ft.replace(R.id.container_omg, fragment);
-            //ft.addToBackStack(null);
+            ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.summer) {
            // titleName.setText("LETO");
