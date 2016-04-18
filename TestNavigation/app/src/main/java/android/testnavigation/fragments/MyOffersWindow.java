@@ -84,7 +84,7 @@ public class MyOffersWindow extends Fragment {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                offersData.removeAll(offersData);
+                //offersData.removeAll(offersData);
                 //offersData.clear();
                 loadMyOffers(BackendlessSettings.urlJsonObj, userId);
             }
@@ -128,7 +128,8 @@ public class MyOffersWindow extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), EditOfferScreen.class);
-                    intent.putExtra("objectId", objeeectId);
+                    intent.putExtra("objectId", currentOffer.getObjectId());
+                    Log.d("WTF",objeeectId + " " + currentOffer.getName());
                     startActivity(intent);
                 }
             });
@@ -144,7 +145,7 @@ public class MyOffersWindow extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            deleteOffer(objeeectId, BackendlessSettings.urlJsonObjId);
+                            deleteOffer(currentOffer.getObjectId(), BackendlessSettings.urlJsonObjId);
                             dialog.dismiss();
                         }
                     });
@@ -167,7 +168,7 @@ public class MyOffersWindow extends Fragment {
     }
 
     private void loadMyOffers(String URL, final String userId) {
-
+        offersData.removeAll(offersData);
         showpDialog();
 
         JsonObjectIdRequest jsonObjReq = new JsonObjectIdRequest(Method.GET, URL, null, new Response.Listener<JSONObject>() {

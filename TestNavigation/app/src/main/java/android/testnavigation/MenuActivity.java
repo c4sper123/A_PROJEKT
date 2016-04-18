@@ -38,6 +38,7 @@ public class MenuActivity extends AppCompatActivity
     private String userName;
     private String userMail;
     private AlertDialog.Builder myAlert;
+    private AlertDialog.Builder myAlert2;
 
 
     @Override
@@ -60,6 +61,7 @@ public class MenuActivity extends AppCompatActivity
         ft.commit();
 
         myAlert = new AlertDialog.Builder(this);
+        myAlert2 = new AlertDialog.Builder(this);
 
         titleName = (TextView) findViewById(R.id.textView5);
         titleName.setText("PONUKY");
@@ -114,16 +116,16 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.bug_report) {
             final EditText input = new EditText(this);
             input.setHint("Detaily o chybe...");
-            myAlert.setView(input);
-            myAlert.setTitle("Bug report");
-            myAlert.setIcon(R.mipmap.ic_bug_black);
-            myAlert.setNegativeButton("Nahlásiť", new DialogInterface.OnClickListener() {
+            myAlert2.setView(input);
+            myAlert2.setTitle("Bug report");
+            myAlert2.setIcon(R.mipmap.ic_bug_black);
+            myAlert2.setNegativeButton("Nahlásiť", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
-            myAlert.show();
+            myAlert2.show();
         }
 
         return super.onOptionsItemSelected(item);

@@ -71,7 +71,7 @@ public class SummerOffersWindow extends Fragment{
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                offersData.removeAll(offersData);
+               // offersData.removeAll(offersData);
                 //offersData.clear();
                 loadOffers(BackendlessSettings.urlJsonObj);
             }
@@ -129,6 +129,7 @@ public class SummerOffersWindow extends Fragment{
         showpDialog();
         Log.d(TAG, "url ka  " + URL);
 
+        offersData.removeAll(offersData);
         JsonObjectIdRequest jsonObjReq = new JsonObjectIdRequest(Method.GET,URL,null ,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
