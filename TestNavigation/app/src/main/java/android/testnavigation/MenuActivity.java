@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -111,7 +112,18 @@ public class MenuActivity extends AppCompatActivity
             myAlert.show();
 
         } else if (id == R.id.bug_report) {
-
+            final EditText input = new EditText(this);
+            input.setHint("Detaily o chybe...");
+            myAlert.setView(input);
+            myAlert.setTitle("Bug report");
+            myAlert.setIcon(R.mipmap.ic_bug_black);
+            myAlert.setNegativeButton("Nahlásiť", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            myAlert.show();
         }
 
         return super.onOptionsItemSelected(item);

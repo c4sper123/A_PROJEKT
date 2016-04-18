@@ -79,7 +79,7 @@
             <EditText
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText"
+                android:id="@+id/txtTitle"
                 android:layout_below="@+id/textView2"
                 android:layout_centerHorizontal="true" />
 
@@ -89,16 +89,15 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Začiatok ponuky"
                 android:id="@+id/textView6"
-                android:layout_below="@+id/editText"
+                android:layout_below="@+id/txtTitle"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp" />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="date"
                 android:ems="10"
-                android:id="@+id/editText3"
+                android:id="@+id/txtStartDate"
                 android:layout_below="@+id/textView6"
                 android:layout_centerHorizontal="true"
                 android:hint="DD/MM/YYYY"/>
@@ -109,16 +108,15 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Koniec ponuky"
                 android:id="@+id/textView7"
-                android:layout_below="@+id/editText3"
+                android:layout_below="@+id/txtStartDate"
                 android:layout_alignStart="@+id/textView2"
                 android:layout_marginTop="30dp"/>
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="date"
                 android:ems="10"
-                android:id="@+id/editText4"
+                android:id="@+id/txtEndDate"
                 android:layout_below="@+id/textView7"
                 android:layout_centerHorizontal="true"
                 android:hint="DD/MM/YYYY"/>
@@ -130,20 +128,20 @@
                 android:text="Cena"
                 android:id="@+id/textView8"
                 android:layout_marginTop="30dp"
-                android:layout_below="@+id/editText4"
+                android:layout_below="@+id/txtEndDate"
                 android:layout_centerHorizontal="true" />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:id="@+id/editText5"
+                android:id="@+id/txtPrice"
                 android:inputType="number|textVisiblePassword"
                 android:maxLength="8"
                 android:digits="0123456789"
                 android:hint="(€)"
                 android:layout_below="@+id/textView8"
-                android:layout_alignStart="@+id/editText4" />
+                android:layout_alignStart="@+id/txtEndDate" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -152,15 +150,15 @@
                 android:text="Detail ponuky"
                 android:id="@+id/textView9"
                 android:layout_marginTop="30dp"
-                android:layout_below="@+id/editText5"
+                android:layout_below="@+id/txtPrice"
                 android:layout_centerHorizontal="true" />
 
             <EditText
                 android:layout_width="250dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:ems="10"
-                android:id="@+id/editText6"
+                android:id="@+id/txtDetails"
                 android:layout_below="@+id/textView9"
                 android:layout_centerHorizontal="true"
                 android:hint="Detail..."/>
@@ -169,8 +167,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Aktualizovať ponuku"
-                android:id="@+id/button"
-                android:layout_below="@+id/editText6"
+                android:id="@+id/updateButton"
+                android:layout_below="@+id/txtDetails"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="20dp"/>
