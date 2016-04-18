@@ -21,7 +21,7 @@ public class JsonObjectIdPutRequest extends StringRequest
     public JsonObjectIdPutRequest(Offer offer,int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(method, url, listener, errorListener);
         this.offer = offer;
-        Log.d("aaaa",  offer.getObjectId() + " " + offer.getName() + " " + offer.getDetails() + " " + Integer.toString(offer.getPrice()));
+        Log.d("aaaa",  offer.getObjectId() + " / " + offer.getName() + " / " + offer.getDetails() + " / " + Integer.toString(offer.getPrice()));
     }
 
     @Override
@@ -32,7 +32,8 @@ public class JsonObjectIdPutRequest extends StringRequest
         headers.put("application-type", "REST");
       //
       //
-      headers.put("Content-Type", "application/json");
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
         return headers;
     }
 

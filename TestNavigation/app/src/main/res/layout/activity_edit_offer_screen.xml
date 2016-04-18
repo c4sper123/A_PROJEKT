@@ -154,8 +154,8 @@
                 android:layout_centerHorizontal="true" />
 
             <EditText
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="150dp"
                 android:inputType="textMultiLine"
                 android:ems="10"
                 android:id="@+id/txtDetails"
@@ -163,15 +163,79 @@
                 android:layout_centerHorizontal="true"
                 android:hint="Detail..."/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Lokalita"
+                android:id="@+id/textView10"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtDetails"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/txtLocality"
+                android:layout_below="@+id/textView10"
+                android:layout_centerHorizontal="true"
+                android:hint="Lokalita"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Typ"
+                android:id="@+id/textView11"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtLocality"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/txtType"
+                android:layout_below="@+id/textView11"
+                android:layout_centerHorizontal="true"
+                android:hint="Typ"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Maximálny počet ľudí"
+                android:id="@+id/textView12"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtType"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/txtPeople"
+                android:inputType="number|textVisiblePassword"
+                android:maxLength="4"
+                android:digits="0123456789"
+                android:layout_below="@+id/textView12"
+                android:layout_centerHorizontal="true"
+                android:hint="Max. počet ľudí"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Aktualizovať ponuku"
                 android:id="@+id/updateButton"
-                android:layout_below="@+id/txtDetails"
+                android:layout_below="@+id/txtPeople"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="20dp"/>
+
+
+
+
         </RelativeLayout>>
     </ScrollView>
 

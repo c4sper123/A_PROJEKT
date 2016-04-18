@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\menu_settings.png",
-        "source": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\src\\main\\res\\drawable\\menu_settings.png"
-    },
-    {
         "merged": "C:\\Users\\tomi\\Documents\\A_projekt\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_dark.xml",
         "source": "C:\\Users\\tomi\\Documents\\A_projekt\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\menu_settings.png",
+        "source": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\src\\main\\res\\drawable\\menu_settings.png"
     },
     {
         "merged": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\checkout.png",
@@ -24,16 +24,16 @@
         "source": "C:\\Users\\tomi\\Documents\\A_projekt\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_ratingbar_small_material.xml"
     },
     {
-        "merged": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background_light.xml",
-        "source": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_dialog_material_background_light.xml"
+        "merged": "C:\\Users\\tomi\\Documents\\A_projekt\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
+        "source": "C:\\Users\\tomi\\Documents\\A_projekt\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_item_background_holo_light.xml"
     },
     {
         "merged": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_edit_text_material.xml",
         "source": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_edit_text_material.xml"
     },
     {
-        "merged": "C:\\Users\\tomi\\Documents\\A_projekt\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
-        "source": "C:\\Users\\tomi\\Documents\\A_projekt\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_item_background_holo_light.xml"
+        "merged": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background_light.xml",
+        "source": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\drawable\\abc_dialog_material_background_light.xml"
     },
     {
         "merged": "C:\\Users\\xkasp_000\\Desktop\\MTAA\\NEW\\A_PROJEKT\\TestNavigation\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",
