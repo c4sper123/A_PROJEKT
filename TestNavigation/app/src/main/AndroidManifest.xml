@@ -9,6 +9,7 @@
         android:name=".Requests.AppController"
         android:allowBackup="true"
         android:label="Zľavový portáľ"
+        android:icon="@mipmap/ic_discount"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".LoginWindow"

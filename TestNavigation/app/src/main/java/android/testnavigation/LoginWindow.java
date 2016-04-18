@@ -15,14 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
-
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-
-
 
 public class LoginWindow extends Activity {
     private ProgressDialog pDialog;
@@ -124,12 +120,4 @@ public class LoginWindow extends Activity {
         }
         return false;
     }
-
-//    public boolean isOnline() {
-//        ConnectivityManager cm =
-//                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//        return netInfo != null && netInfo.isConnectedOrConnecting();
-//    }
-
 }

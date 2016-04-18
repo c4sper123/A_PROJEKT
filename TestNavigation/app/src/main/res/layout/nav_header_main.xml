@@ -20,7 +20,8 @@
         android:id="@+id/txtUserName"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
-        android:layout_marginBottom="0dp" />
+        android:layout_marginBottom="0dp"
+        android:textSize="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,6 +32,6 @@
         android:layout_gravity="center_horizontal"
         android:textColor="#eeeeee"
         android:layout_marginBottom="25dp"
-        android:textSize="12dp" />
+        android:textSize="15dp" />
 
 </LinearLayout>

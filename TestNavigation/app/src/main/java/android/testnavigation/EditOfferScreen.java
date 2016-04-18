@@ -11,6 +11,7 @@ import android.testnavigation.Requests.JsonObjectIdPutRequest;
 import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class EditOfferScreen extends AppCompatActivity {
     private String objeeectId;
@@ -67,6 +69,10 @@ public class EditOfferScreen extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+
                 editOffer(objeeectId, BackendlessSettings.urlJsonObjId);
             }
         });
@@ -86,7 +92,7 @@ public class EditOfferScreen extends AppCompatActivity {
 
 
     private void editOffer(String objectId, String URL) {
-
+        //URL = "https://api.backendless.com/v1/data/offers";
         showpDialog();
         URL += objectId;
         Log.d("URL put: ", URL);
@@ -105,6 +111,21 @@ public class EditOfferScreen extends AppCompatActivity {
         final StringBuilder sb2 = new StringBuilder(txtPrice.getText().length());
         sb2.append(txtPrice.getText());
         editedOffer.setPrice(Integer.parseInt(sb2.toString()));
+
+        TextView txtLocality = (TextView) findViewById(R.id.txtLocality);
+        final StringBuilder sb3 = new StringBuilder(txtLocality.getText().length());
+        sb3.append(txtLocality.getText());
+        editedOffer.setLocality(sb3.toString());
+
+//        TextView txtType = (TextView) findViewById(R.id.txtType);
+//        final StringBuilder sb4 = new StringBuilder(txtType.getText().length());
+//        sb4.append(txtType.getText());
+//        editedOffer.setType(Integer.parseInt(sb4.toString()));
+
+        TextView txtMaxPeople = (TextView) findViewById(R.id.txtPeople);
+        final StringBuilder sb5 = new StringBuilder(txtMaxPeople.getText().length());
+        sb5.append(txtMaxPeople.getText());
+        editedOffer.setMaxPeople(Integer.parseInt(sb5.toString()));
 
 
         final JsonObjectIdPutRequest stringRequest = new JsonObjectIdPutRequest(editedOffer, Request.Method.PUT, URL, new Response.Listener<String>() {
@@ -141,6 +162,7 @@ public class EditOfferScreen extends AppCompatActivity {
 
     private void loadEditedItems(){
         String URL = BackendlessSettings.urlJsonObjId;
+
         showpDialog();
         URL += objeeectId;
         Log.d("Request URL: ", URL); //len na vypisanie do logu, ako vyzera moja request URL
@@ -162,6 +184,18 @@ public class EditOfferScreen extends AppCompatActivity {
                     txtDetails.setText(editedOffer.getDetails());
                     TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
                     txtPrice.setText(Integer.toString(editedOffer.getPrice()));
+                    TextView txtLocality = (TextView) findViewById(R.id.txtLocality);
+                    txtLocality.setText(editedOffer.getLocality());
+                    TextView txtMaxPeople = (TextView) findViewById(R.id.txtPeople);
+                    txtMaxPeople.setText(Integer.toString(editedOffer.getMaxPeople()));
+                    TextView txtType = (TextView) findViewById(R.id.txtType);
+                    switch (editedOffer.getType()){
+                        case 1: txtType.setText("Chata");break;
+                        case 2: txtType.setText("Hotel");break;
+                        case 3: txtType.setText("Penzión");break;
+                        case 4: txtType.setText("Apartmán");break;
+                        default:break;
+                    }
 
                     TextView txtStartDate = (TextView) findViewById(R.id.txtStartDate);
                     TextView txtEndDate = (TextView) findViewById(R.id.txtEndDate);

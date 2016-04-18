@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class DeleteObjectIdRequest extends StringRequest{
 
-
     public DeleteObjectIdRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(method, url, listener, errorListener);
     }

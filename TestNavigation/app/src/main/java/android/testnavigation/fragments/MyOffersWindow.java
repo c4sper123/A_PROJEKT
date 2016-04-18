@@ -84,13 +84,9 @@ public class MyOffersWindow extends Fragment {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //offersData.removeAll(offersData);
-                //offersData.clear();
                 loadMyOffers(BackendlessSettings.urlJsonObj, userId);
             }
         });
-
-
         return rootView;
     }
 
@@ -114,8 +110,6 @@ public class MyOffersWindow extends Fragment {
 
             TextView nameText = (TextView) itemView.findViewById(R.id.offerNameTxt);
             nameText.setText(currentOffer.getName());
-//            TextView priceText = (TextView) itemView.findViewById(R.id.offerPriceTxt);
-//            priceText.setText("" + currentOffer.getPrice().toString() + " €");
             ImageView iconView = (ImageView) itemView.findViewById(R.id.imageView);
             iconView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             UrlImageViewHelper.setUrlDrawable(iconView, currentOffer.getImageUrl());
@@ -244,7 +238,7 @@ public class MyOffersWindow extends Fragment {
 
 
     private void deleteOffer(String objectId, String URL) {
-
+        objeeectId = objectId;
         showpDialog();
         URL += objectId;
         Log.d("URL delete: ", URL);
@@ -275,7 +269,6 @@ public class MyOffersWindow extends Fragment {
                 hidepDialog();
             }
         });
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(stringRequest);
     }

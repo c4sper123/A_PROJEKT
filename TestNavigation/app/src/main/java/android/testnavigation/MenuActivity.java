@@ -1,8 +1,8 @@
 package android.testnavigation;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentTransaction;
@@ -20,20 +20,15 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DataPassListener {
     private Toolbar toolbar;
     private TextView titleName;
-    private ImageButton refreshBtn;
     private String userId;
     private String userName;
     private String userMail;
@@ -126,7 +121,14 @@ public class MenuActivity extends AppCompatActivity
                 }
             });
             myAlert2.show();
+        } else if(id == R.id.exit){
+            this.finish();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -137,16 +139,13 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.add_offer) {
-           // titleName.setText("PRIDAŤ PONUKU");
         } else if (id == R.id.offers) {
-            //titleName.setText("PONUKY");
             android.support.v4.app.Fragment fragment = new OffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_omg, fragment);
             ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.my_offers) {
-          //  titleName.setText("MOJE PONUKY");
             android.support.v4.app.Fragment fragment = new MyOffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             Bundle bundle = new Bundle();
@@ -156,7 +155,6 @@ public class MenuActivity extends AppCompatActivity
             ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.summer) {
-           // titleName.setText("LETO");
             android.support.v4.app.Fragment fragment = new SummerOffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_omg, fragment);
@@ -168,7 +166,6 @@ public class MenuActivity extends AppCompatActivity
             ft.replace(R.id.container_omg, fragment);
             ft.addToBackStack(null);
             ft.commit();
-           // titleName.setText("ZIMA");
         } else if (id == R.id.logout) {
             finish();
         }
@@ -194,6 +191,4 @@ public class MenuActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
-
-
 }

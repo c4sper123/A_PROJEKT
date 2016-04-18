@@ -71,8 +71,6 @@ public class WinterOffersWindow extends Fragment{
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // offersData.removeAll(offersData);
-                //offersData.clear();
                 loadOffers(BackendlessSettings.urlJsonObj);
             }
         });

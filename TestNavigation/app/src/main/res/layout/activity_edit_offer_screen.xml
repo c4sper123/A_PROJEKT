@@ -80,8 +80,10 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtTitle"
+                android:gravity="center"
                 android:layout_below="@+id/textView2"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:hint="Názov ponuky" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,6 +98,7 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:ems="10"
                 android:id="@+id/txtStartDate"
                 android:layout_below="@+id/textView6"
@@ -116,6 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:gravity="center"
                 android:id="@+id/txtEndDate"
                 android:layout_below="@+id/textView7"
                 android:layout_centerHorizontal="true"
@@ -138,6 +142,7 @@
                 android:id="@+id/txtPrice"
                 android:inputType="number|textVisiblePassword"
                 android:maxLength="8"
+                android:gravity="center"
                 android:digits="0123456789"
                 android:hint="(€)"
                 android:layout_below="@+id/textView8"
@@ -155,9 +160,10 @@
 
             <EditText
                 android:layout_width="300dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:ems="10"
+                android:gravity="center"
                 android:id="@+id/txtDetails"
                 android:layout_below="@+id/textView9"
                 android:layout_centerHorizontal="true"
@@ -177,6 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:gravity="center"
                 android:id="@+id/txtLocality"
                 android:layout_below="@+id/textView10"
                 android:layout_centerHorizontal="true"
@@ -196,6 +203,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:gravity="center"
                 android:id="@+id/txtType"
                 android:layout_below="@+id/textView11"
                 android:layout_centerHorizontal="true"
@@ -215,6 +223,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:gravity="center"
                 android:id="@+id/txtPeople"
                 android:inputType="number|textVisiblePassword"
                 android:maxLength="4"
