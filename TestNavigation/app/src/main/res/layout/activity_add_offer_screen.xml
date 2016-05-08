@@ -232,12 +232,72 @@
                 android:layout_centerHorizontal="true"
                 android:hint="Max. počet ľudí"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Kategória"
+                android:id="@+id/textView13"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtPeople"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtCategory"
+                android:layout_below="@+id/textView13"
+                android:layout_centerHorizontal="true"
+                android:hint="Kategória"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Podkategória"
+                android:id="@+id/textView14"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtCategory"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtSubcategory"
+                android:layout_below="@+id/textView14"
+                android:layout_centerHorizontal="true"
+                android:hint="Podkategória"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="URL adresa obrázka"
+                android:id="@+id/textView15"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtSubcategory"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtImageurl"
+                android:layout_below="@+id/textView15"
+                android:layout_centerHorizontal="true"
+                android:hint="URL adresa"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pridať ponuku"
                 android:id="@+id/updateButton"
-                android:layout_below="@+id/txtPeople"
+                android:layout_below="@+id/txtImageurl"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="20dp"/>
