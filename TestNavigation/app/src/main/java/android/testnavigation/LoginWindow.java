@@ -63,7 +63,7 @@ public class LoginWindow extends Activity {
 
 
         //postDataOnServer();
-        //deleteDataFromServer();
+        //deleteDataFromServer("eb78f3f4-8749-4985-acbc-7cacac4bb893");
         //updateDataOnServer();
         getDataFromServer();
         //getOneDataFromServer();
@@ -171,8 +171,20 @@ public class LoginWindow extends Activity {
         try {
             JSONObject jsObj;
             js.put("url", "/data/TonoKasperke14");
-            newJs.put("test4", "Test4");
-            newJs.put("ttt", "fff");
+            newJs.put("startDate", "1458946800000");
+            newJs.put("endDate", "1461448800000");
+            newJs.put("locality", "Južná Afrika");
+            newJs.put("type", "2");
+            newJs.put("ownerId", "02F4F839-7C2F-1590-FF01-7193C35E7100");
+            newJs.put("price", "2039");
+            newJs.put("imageUrl", "http://img.topky.sk/cestovky/big/1040328.jpg/Viktoriine-vodopady.jpg");
+            newJs.put("name", "Exotická dovolenka");
+            newJs.put("details", "8-dňový zájazd, v cene je zahrnuté: ubytovanie v 3* hotely s raňajkami, " +
+                    "1x obed, 2x večera, letenky, odvoz batožiny, slovenský kvalifikovaný sprievodca, vstupy," +
+                    " jazda na slonoch, návšteva Viktóriiných vodopádov");
+            newJs.put("maxPeople", "6");
+            newJs.put("mainCategory", "Leto");
+            newJs.put("category", "Výlet na lodi");
             jsObj = new JSONObject().put("data", newJs);
             js.put("data",jsObj);
         } catch (JSONException e) {
@@ -189,7 +201,6 @@ public class LoginWindow extends Activity {
                     body = obj.getJSONObject("body");
                     String id = body.getString("id");
                     Log.i("postInfo", "id : " + id);
-                    Log.i("postInfo", body.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -197,12 +208,12 @@ public class LoginWindow extends Activity {
         });
     }
 
-    private void deleteDataFromServer(){
+    private void deleteDataFromServer(String objectId){
         JSONObject obj = new JSONObject();
         SockHandle socketHandler = new SockHandle();
 
         try {
-            obj.put("url", "/data/TonoKasperke14/15f175b0-e8ad-4c26-aa04-c4bb26ce860e"); //id objektu
+            obj.put("url", "/data/TonoKasperke14/" + objectId); //id objektu
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.testnavigation.Requests.SockHandle;
 import android.testnavigation.fragments.DataPassListener;
 import android.testnavigation.fragments.MyOffersWindow;
 import android.testnavigation.fragments.OfferDetailsWindow;
@@ -25,6 +26,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DataPassListener {
     private Toolbar toolbar;
@@ -34,6 +39,7 @@ public class MenuActivity extends AppCompatActivity
     private String userMail;
     private AlertDialog.Builder myAlert;
     private AlertDialog.Builder myAlert2;
+    public SockHandle socketHandler;
 
 
     @Override
@@ -45,6 +51,7 @@ public class MenuActivity extends AppCompatActivity
         userName = getIntent().getStringExtra("userName");
         userMail = getIntent().getStringExtra("userMail");
         Log.d("WAU",userMail + " " + userName);
+
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -76,6 +83,10 @@ public class MenuActivity extends AppCompatActivity
         TextView txtUserMail = (TextView) v.findViewById(R.id.txtUserMail);
         txtUserMail.setText(userMail);
 
+    }
+
+    public SockHandle getSocket(){
+        return socketHandler;
     }
 
     @Override
