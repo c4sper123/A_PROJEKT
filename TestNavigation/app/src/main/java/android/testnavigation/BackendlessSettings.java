@@ -7,5 +7,4 @@ public class BackendlessSettings {
     public static final String appVersion = "v1";
     public static final String urlJsonObj = "https://api.backendless.com/v1/data/offers?pageSize=100";
     public static final String urlJsonObjId = "https://api.backendless.com/v1/data/offers/";
-    public static final String REST = "D7514921-203F-16C5-FF02-7AFE42EAAC00";
 }

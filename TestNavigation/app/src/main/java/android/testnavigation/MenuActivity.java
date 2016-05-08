@@ -75,6 +75,7 @@ public class MenuActivity extends AppCompatActivity
         txtUserName.setText(userName);
         TextView txtUserMail = (TextView) v.findViewById(R.id.txtUserMail);
         txtUserMail.setText(userMail);
+
     }
 
     @Override
@@ -191,4 +192,5 @@ public class MenuActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
+
 }
