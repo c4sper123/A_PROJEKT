@@ -11,6 +11,7 @@ import android.testnavigation.Requests.AppController;
 import android.testnavigation.BackendlessSettings;
 import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.R;
+import android.testnavigation.Requests.SockHandle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import io.socket.client.Ack;
+
 public class OfferDetailsWindow extends Fragment {
     private String objectId;
     private String TAG = this.getClass().getSimpleName();
@@ -49,8 +52,7 @@ public class OfferDetailsWindow extends Fragment {
     private Button buyBtn;
     private View rootView;
     private TextView titleName;
-
-
+    private SockHandle socket;
 
     @Nullable
     @Override
@@ -62,6 +64,7 @@ public class OfferDetailsWindow extends Fragment {
         ImageView imgWhite = (ImageView) rootView.findViewById(R.id.imageView4);
         imgWhite.setVisibility(View.VISIBLE);
 
+        socket = null;
 
         pDialog = new ProgressDialog(this.getContext());
         pDialog.setMessage("Prosím čakajte...");
@@ -83,7 +86,8 @@ public class OfferDetailsWindow extends Fragment {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadOffer(BackendlessSettings.urlJsonObjId, objectId);
+                //loadOffer(BackendlessSettings.urlJsonObjId, objectId);
+                getOneDataFromServer(objectId);
             }
         });
 
@@ -91,7 +95,8 @@ public class OfferDetailsWindow extends Fragment {
         imageDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadImageDetail(BackendlessSettings.urlJsonObjId, objectId);
+                //loadImageDetail(BackendlessSettings.urlJsonObjId, objectId);
+                getImageDetailFromServer(objectId);
             }
         });
 
@@ -118,7 +123,8 @@ public class OfferDetailsWindow extends Fragment {
             }
         });
 
-        loadOffer(BackendlessSettings.urlJsonObjId, objectId);
+        //loadOffer(BackendlessSettings.urlJsonObjId, objectId);
+        getOneDataFromServer(objectId);
         return rootView;
     }
 
@@ -311,5 +317,218 @@ public class OfferDetailsWindow extends Fragment {
         });
     }
 
+    private void getOneDataFromServer(String objectId){
+        showpDialog();
+        socket = new SockHandle();
 
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("url", "/data/TonoKasperke14/"+objectId); //username a id objektu
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        socket.getSocket().emit("get", obj, new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject) args[0];
+                JSONObject body = null;
+                Log.d("getOneInfo1", obj.toString());
+
+                try {
+                    body = obj.getJSONObject("body");
+                    Log.d("getOneInfo2", body.toString());
+                    JSONObject response = body.getJSONObject("data");
+                    showDetailOffer(response);
+
+                } catch (JSONException e) {
+                    //e.printStackTrace();
+                    hidepDialog();
+
+                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                    myAlert.setTitle("Error");
+                    myAlert.setIcon(R.drawable.error_icon);
+                    myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                        }
+                    });
+                    myAlert.show();
+                }
+            }
+        });
+    }
+
+    private void showDetailOffer(final JSONObject response){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                View itemView = getView();
+                TextView textView = (TextView) itemView.findViewById(R.id.offerNameTxt);
+                try {
+                    textView.setText(response.getString("name"));
+
+                    Button btn = (Button) itemView.findViewById(R.id.buyBtn);
+                    btn.setText("KÚPIŤ ZA " + response.getString("price") + "€");
+
+                    String type = null;
+                    switch (response.getInt("type")) {
+                        case 1: {
+                            type = "Chata";
+                            break;
+                        }
+                        case 2: {
+                            type = "Hotel";
+                            break;
+                        }
+                        case 3: {
+                            type = "Penzión";
+                            break;
+                        }
+                        case 4: {
+                            type = "Apartmán";
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    ;
+                    textView = (TextView) itemView.findViewById(R.id.textView3);
+                    textView.setMovementMethod(new ScrollingMovementMethod());
+                    textView.setText(response.getString("details") +
+                                    "\n\nLokalita: " + response.getString("locality") +
+                                    "\n\nTyp: " + type +
+                                    "\n\nMaximálny počet ľudí: " + response.getString("maxPeople") +
+                                    "\n\nKategória: " + response.getString("mainCategory") +
+                                    "\n\nPodkategória: " + response.getString("category")
+                    );
+
+                    ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    UrlImageViewHelper.setUrlDrawable(imageView, response.getString("imageUrl"));
+
+                    textView = (TextView) itemView.findViewById(R.id.offerDateTxt);
+                    Date start = new Date();
+                    Date end = new Date();
+
+                    start.setTime(Long.parseLong(response.getString("startDate")));  //tuuu
+                    end.setTime(Long.parseLong(response.getString("endDate")));        //tuuu2
+
+                    java.text.DateFormat formatStart, formatEnd;
+                    formatStart = new SimpleDateFormat("dd.MM.");
+                    formatEnd = new SimpleDateFormat("dd.MM.yyyy");
+
+                    String staDate = formatStart.format(start);
+                    String endDate = formatEnd.format(end);
+
+                    textView.setText(staDate + " - " + endDate); //vyzera to takto: dd.MM. - dd.MM.yyyy  (napr. 3.4. - 20.4.2016)
+                    itemView.findViewById(R.id.imageView4).setVisibility(View.INVISIBLE);
+                    hidepDialog();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void getImageDetailFromServer(String objectId){
+        showpDialog();
+        socket = new SockHandle();
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("url", "/data/TonoKasperke14/"+objectId); //username a id objektu
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        socket.getSocket().emit("get", obj, new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject) args[0];
+                JSONObject body = null;
+                Log.d("getOneInfo1", obj.toString());
+
+                try {
+                    body = obj.getJSONObject("body");
+                    Log.d("getOneInfo2", body.toString());
+                    JSONObject response = body.getJSONObject("data");
+                    showDetailImageOffer(response);
+
+                } catch (JSONException e) {
+                    //e.printStackTrace();
+                    hidepDialog();
+
+                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                    myAlert.setTitle("Error");
+                    myAlert.setIcon(R.drawable.error_icon);
+                    myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                        }
+                    });
+                    myAlert.show();
+                }
+            }
+        });
+    }
+
+    private void showDetailImageOffer(final JSONObject response){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    final View itemView = getView();
+
+                    String imageUrl = response.getString("imageUrl");
+
+                    final ImageView imageView = (ImageView) itemView.findViewById(R.id.imageDetail);
+                    ImageView imgWhite = (ImageView) itemView.findViewById(R.id.imageView4);
+                    imgWhite.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
+
+                    setScroll(true);
+
+
+                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    UrlImageViewHelper.setUrlDrawable(imageView, imageUrl);
+
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ImageView imgWhite = (ImageView) itemView.findViewById(R.id.imageView4);
+                            imageView.setVisibility(View.INVISIBLE);
+                            imgWhite.setVisibility(View.INVISIBLE);
+                            setScroll(false);
+                        }
+                    });
+                    hidepDialog();
+                } catch (JSONException e) {
+                    hidepDialog();
+
+                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                    myAlert.setTitle("Error");
+                    myAlert.setIcon(R.drawable.error_icon);
+                    myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                        }
+                    });
+                    myAlert.show();
+                }
+            }
+        });
+    }
 }

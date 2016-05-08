@@ -16,6 +16,7 @@ import android.testnavigation.EditOfferScreen;
 import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.Offer;
 import android.testnavigation.R;
+import android.testnavigation.Requests.SockHandle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import io.socket.client.Ack;
+
 public class MyOffersWindow extends Fragment {
 
     private ArrayList<Offer> offersData = new ArrayList<>();
@@ -53,6 +56,7 @@ public class MyOffersWindow extends Fragment {
     private TextView titleName;
     public String objeeectId;
     private ImageButton editBtn;
+    private SockHandle socket;
 
     @Nullable
     @Override
@@ -64,6 +68,8 @@ public class MyOffersWindow extends Fragment {
         pDialog = new ProgressDialog(this.getContext());
         pDialog.setMessage("Prosím čakajte...");
         pDialog.setCancelable(false);
+
+        socket = null;
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         titleName = (TextView) toolbar.findViewById(R.id.textView5);
@@ -78,22 +84,29 @@ public class MyOffersWindow extends Fragment {
             //chyba
         }
 
-        loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+        //loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+        loadMyDataFromServer(userId);
 
         refreshBtn = (ImageButton) toolbar.findViewById(R.id.refreshBtn);
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+                //loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+                loadMyDataFromServer(userId);
             }
         });
         return rootView;
     }
 
-    private void showAllOffers() {
-        ArrayAdapter<Offer> adapter = new MyListAdapter();
-        ListView list = (ListView) getView().findViewById(R.id.offersListView);
-        list.setAdapter(adapter);
+    private void showAllOffers(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayAdapter<Offer> adapter = new MyListAdapter();
+                ListView list = (ListView) getView().findViewById(R.id.offersListView);
+                list.setAdapter(adapter);
+            }
+        });
     }
 
     private class MyListAdapter extends ArrayAdapter<Offer> {
@@ -123,7 +136,7 @@ public class MyOffersWindow extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), EditOfferScreen.class);
                     intent.putExtra("objectId", currentOffer.getObjectId());
-                    Log.d("WTF",objeeectId + " " + currentOffer.getName());
+                    //Log.d("WTF",objeeectId + " " + currentOffer.getName());
                     startActivity(intent);
                 }
             });
@@ -138,8 +151,9 @@ public class MyOffersWindow extends Fragment {
                     myAlert.setNegativeButton("Vymazať", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                            deleteOffer(currentOffer.getObjectId(), BackendlessSettings.urlJsonObjId);
+                            //deleteOffer(currentOffer.getObjectId(), BackendlessSettings.urlJsonObjId);
+                            deleteDataFromServer(currentOffer.getObjectId());
+                            loadMyDataFromServer(userId);
                             dialog.dismiss();
                         }
                     });
@@ -180,7 +194,6 @@ public class MyOffersWindow extends Fragment {
                                     Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
                                     offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
                                     offerObject.getString("imageUrl"), offerObject.getString("objectId")));
-
                         }
                     }
                     if (!response.getString("nextPage").equals("null")) {
@@ -247,7 +260,7 @@ public class MyOffersWindow extends Fragment {
             @Override
             public void onResponse(String response) {
                 Toast.makeText(getContext(),"Ponuka úspešne vymazaná",Toast.LENGTH_SHORT).show();
-                loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+                //loadMyOffers(BackendlessSettings.urlJsonObj, userId);
                 hidepDialog();
             }
         }, new Response.ErrorListener() {
@@ -271,5 +284,98 @@ public class MyOffersWindow extends Fragment {
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void deleteDataFromServer(final String objectId){
+        final JSONObject obj = new JSONObject();
+        socket = new SockHandle();
+        showpDialog();
+
+        try {
+            obj.put("url", "/data/TonoKasperke14/" + objectId); //id objektu
+            Toast.makeText(getContext(),"Ponuka úspešne vymazaná",Toast.LENGTH_SHORT).show();
+            //loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+            hidepDialog();
+        } catch (JSONException e) {
+            myAlert.setMessage("Nepodarilo sa vymazať ponuku!").create();
+            myAlert.setTitle("Error");
+            myAlert.setIcon(R.drawable.error_icon);
+            myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    //deleteOffer(objeeectId, BackendlessSettings.urlJsonObjId);
+                    deleteDataFromServer(objectId);
+                }
+            });
+            myAlert.show();
+            hidepDialog();
+        }
+
+        socket.getSocket().emit("delete", obj, new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject) args[0];
+                Log.d("deletedInfo", obj.toString());
+            }
+        });
+    }
+
+    private void loadMyDataFromServer(final String userId) {
+        showpDialog();
+        offersData.removeAll(offersData);
+        socket = new SockHandle();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("url", "/data/TonoKasperke14"); //username
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        socket.getSocket().emit("get", obj, new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject) args[0];
+                JSONObject body = null;
+                JSONArray data = null;
+                //Log.d("getInfo", obj.toString());
+                try {
+                    body = obj.getJSONObject("body");
+                    data = body.getJSONArray("data");
+                    JSONObject data1;
+                    //Log.i("getInfo",data.toString());
+
+                    for (int i = 0; i < data.length(); i++) {
+                        data1 = data.getJSONObject(i);
+                        //Log.i("getInfoData1",data1.toString());
+                        JSONObject offerObject = data1.getJSONObject("data");
+                        //Log.i("getInfoOffer",offerObject.toString());
+                        if(offerObject.getString("ownerId").equals(userId)) {
+                            offersData.add(new Offer(offerObject.getString("name"), offerObject.getString("locality"), offerObject.getString("details"),
+                                    Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
+                                    offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
+                                    offerObject.getString("imageUrl"), data1.getString("id")));
+                        }
+                    }
+                    showAllOffers();
+                    hidepDialog();
+                } catch (JSONException e) {
+                    hidepDialog();
+                    Log.d("getError", ":(");
+                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                    myAlert.setTitle("Error");
+                    myAlert.setIcon(R.drawable.error_icon);
+                    myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            loadMyDataFromServer(userId);
+                        }
+                    });
+                    myAlert.show();
+                }
+            }
+        });
     }
 }

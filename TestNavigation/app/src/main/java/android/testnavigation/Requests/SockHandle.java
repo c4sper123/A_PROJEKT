@@ -1,8 +1,6 @@
 package android.testnavigation.Requests;
 
-
 import io.socket.client.Socket;
-
 
 public class SockHandle {
     private static Socket socket;

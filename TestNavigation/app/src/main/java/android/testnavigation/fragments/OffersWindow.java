@@ -233,7 +233,7 @@ public class OffersWindow extends Fragment{
     }
 
     private void loadDataFromServer() {
-
+        showpDialog();
         offersData.removeAll(offersData);
         socket = new SockHandle();
 

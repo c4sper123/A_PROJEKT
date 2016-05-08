@@ -33,6 +33,7 @@ import io.socket.client.IO;
 public class LoginWindow extends Activity {
     private ProgressDialog pDialog;
     private AlertDialog.Builder myAlert;
+    private SockHandle socket;
 
 
     @Override
@@ -54,10 +55,11 @@ public class LoginWindow extends Activity {
         opts.forceNew = true;
         opts.timeout = 5000;
 
-        SockHandle socketHandler = new SockHandle();
+        socket = null;
+        socket = new SockHandle();
         try {
-            socketHandler.setSocket(IO.socket("http://sandbox.touch4it.com:1341/?__sails_io_sdk_version=0.12.1", opts));
-            socketHandler.getSocket().connect();
+            socket.setSocket(IO.socket("http://sandbox.touch4it.com:1341/?__sails_io_sdk_version=0.12.1", opts));
+            socket.getSocket().connect();
         }
         catch (URISyntaxException e) {}
 
@@ -65,7 +67,7 @@ public class LoginWindow extends Activity {
         //postDataOnServer();
         //deleteDataFromServer("eb78f3f4-8749-4985-acbc-7cacac4bb893");
         //updateDataOnServer();
-        getDataFromServer();
+        //getDataFromServer();
         //getOneDataFromServer();
 
 
