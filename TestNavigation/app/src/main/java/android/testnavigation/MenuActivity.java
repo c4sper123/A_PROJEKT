@@ -85,10 +85,6 @@ public class MenuActivity extends AppCompatActivity
 
     }
 
-    public SockHandle getSocket(){
-        return socketHandler;
-    }
-
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
@@ -150,7 +146,9 @@ public class MenuActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.add_offer) {
+        if (id == R.id.add_offerr) {
+            Intent intent = new Intent(this, AddOfferScreen.class);
+            startActivity(intent);
         } else if (id == R.id.offers) {
             android.support.v4.app.Fragment fragment = new OffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

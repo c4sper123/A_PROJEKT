@@ -1,5 +1,6 @@
 package android.testnavigation.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.app.ProgressDialog;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.testnavigation.Requests.AppController;
 import android.testnavigation.BackendlessSettings;
@@ -137,7 +139,7 @@ public class MyOffersWindow extends Fragment {
                     Intent intent = new Intent(getActivity(), EditOfferScreen.class);
                     intent.putExtra("objectId", currentOffer.getObjectId());
                     //Log.d("WTF",objeeectId + " " + currentOffer.getName());
-                    startActivity(intent);
+                    startActivityForResult(intent, 9999);
                 }
             });
 
@@ -249,6 +251,13 @@ public class MyOffersWindow extends Fragment {
             pDialog.dismiss();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == 9999) && (resultCode == Activity.RESULT_OK))
+            loadMyDataFromServer(userId);
+    }
 
     private void deleteOffer(String objectId, String URL) {
         objeeectId = objectId;
@@ -363,17 +372,29 @@ public class MyOffersWindow extends Fragment {
                 } catch (JSONException e) {
                     hidepDialog();
                     Log.d("getError", ":(");
-                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
-                    myAlert.setTitle("Error");
-                    myAlert.setIcon(R.drawable.error_icon);
-                    myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            loadMyDataFromServer(userId);
-                        }
-                    });
-                    myAlert.show();
+                }
+                try {
+                    if(obj.getString("statusCode").equals("200"));
+                    else{
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        loadMyDataFromServer(userId);
+                                    }
+                                });
+                                myAlert.show();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });

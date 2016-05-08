@@ -255,7 +255,7 @@ public class OffersWindow extends Fragment{
                     body = obj.getJSONObject("body");
                     data = body.getJSONArray("data");
                     JSONObject data1;
-                    //Log.i("getInfo",data.toString());
+                    Log.i("getInfo",data.toString());
 
                     for (int i = 0; i < data.length(); i++) {
                         data1 = data.getJSONObject(i);
@@ -267,12 +267,14 @@ public class OffersWindow extends Fragment{
                                 offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
                                 offerObject.getString("imageUrl"), data1.getString("id")));
                     }
+                    Log.i("getInfoData1",data.toString());
                     showAllOffers();
+                    Log.i("getInfoData1", data.toString());
                     hidepDialog();
                 } catch (JSONException e) {
                     hidepDialog();
-                    Log.d("getError", ":(");
-                   myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                    Log.d("getError", body.toString());
+                    /*myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
                     myAlert.setTitle("Error");
                     myAlert.setIcon(R.drawable.error_icon);
                     myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
@@ -282,7 +284,7 @@ public class OffersWindow extends Fragment{
                             loadDataFromServer();
                         }
                     });
-                    myAlert.show();
+                    myAlert.show();*/
                 }
             }
         });

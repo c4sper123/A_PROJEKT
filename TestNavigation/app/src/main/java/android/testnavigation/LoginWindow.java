@@ -33,7 +33,7 @@ import io.socket.client.IO;
 public class LoginWindow extends Activity {
     private ProgressDialog pDialog;
     private AlertDialog.Builder myAlert;
-    private SockHandle socket;
+    //private SockHandle socket;
 
 
     @Override
@@ -55,24 +55,23 @@ public class LoginWindow extends Activity {
         opts.forceNew = true;
         opts.timeout = 5000;
 
-        socket = null;
-        socket = new SockHandle();
+        //socket = null;
+        SockHandle socket = new SockHandle();
         try {
             socket.setSocket(IO.socket("http://sandbox.touch4it.com:1341/?__sails_io_sdk_version=0.12.1", opts));
             socket.getSocket().connect();
         }
-        catch (URISyntaxException e) {}
+        catch (URISyntaxException e) {
+            //Toast.makeText(getApplicationContext(),"Nepodarilo sa pripojiť k socketu!", Toast.LENGTH_LONG).show();
+        }
 
 
-        //postDataOnServer();
-        //deleteDataFromServer("eb78f3f4-8749-4985-acbc-7cacac4bb893");
+
+        //deleteDataFromServer("ec452906-e1eb-465d-a58f-1f0d918802bb");
         //updateDataOnServer();
-        //getDataFromServer();
+        //postDataOnServer();
+       // getDataFromServer();
         //getOneDataFromServer();
-
-
-
-
 
 
         Backendless.initApp(this, BackendlessSettings.AP_ID, BackendlessSettings.SECRET_KEY, BackendlessSettings.appVersion);

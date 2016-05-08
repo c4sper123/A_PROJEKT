@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="android.testnavigation.AddOfferScreen">
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+
+
+        android:elevation="4dp"
+        android:id="@+id/toolbar">
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            tools:context="${relativePackage}.${activityClass}"
+            android:focusableInTouchMode="false">
+
+
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="PRIDAŤ PONUKU"
+                android:id="@+id/textView5"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgBack"
+                android:background="@color/colorPrimary"
+
+                android:src="@mipmap/ic_back"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="false"
+                android:layout_marginTop="3dp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+        android:id="@+id/scroll_view"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Názov ponuky"
+                android:id="@+id/textView2"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtTitle"
+                android:gravity="center"
+                android:layout_below="@+id/textView2"
+                android:layout_centerHorizontal="true"
+                android:hint="Názov ponuky" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Začiatok ponuky"
+                android:id="@+id/textView6"
+                android:layout_below="@+id/txtTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:ems="10"
+                android:id="@+id/txtStartDate"
+                android:layout_below="@+id/textView6"
+                android:layout_centerHorizontal="true"
+                android:hint="DD/MM/YYYY"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Koniec ponuky"
+                android:id="@+id/textView7"
+                android:layout_below="@+id/txtStartDate"
+                android:layout_alignStart="@+id/textView2"
+                android:layout_marginTop="30dp"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtEndDate"
+                android:layout_below="@+id/textView7"
+                android:layout_centerHorizontal="true"
+                android:hint="DD/MM/YYYY"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Cena"
+                android:id="@+id/textView8"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtEndDate"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/txtPrice"
+                android:inputType="number|textVisiblePassword"
+                android:maxLength="8"
+                android:gravity="center"
+                android:digits="0123456789"
+                android:hint="(€)"
+                android:layout_below="@+id/textView8"
+                android:layout_alignStart="@+id/txtEndDate" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Detail ponuky"
+                android:id="@+id/textView9"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtPrice"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtDetails"
+                android:layout_below="@+id/textView9"
+                android:layout_centerHorizontal="true"
+                android:hint="Detail..."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Lokalita"
+                android:id="@+id/textView10"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtDetails"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtLocality"
+                android:layout_below="@+id/textView10"
+                android:layout_centerHorizontal="true"
+                android:hint="Lokalita"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Typ"
+                android:id="@+id/textView11"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtLocality"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtType"
+                android:layout_below="@+id/textView11"
+                android:layout_centerHorizontal="true"
+                android:hint="Typ"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Maximálny počet ľudí"
+                android:id="@+id/textView12"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/txtType"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:id="@+id/txtPeople"
+                android:inputType="number|textVisiblePassword"
+                android:maxLength="4"
+                android:digits="0123456789"
+                android:layout_below="@+id/textView12"
+                android:layout_centerHorizontal="true"
+                android:hint="Max. počet ľudí"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pridať ponuku"
+                android:id="@+id/updateButton"
+                android:layout_below="@+id/txtPeople"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="20dp"/>
+
+
+
+
+        </RelativeLayout>>
+    </ScrollView>
+
+
+</RelativeLayout>
+
+
+
+

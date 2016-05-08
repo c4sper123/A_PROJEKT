@@ -1,5 +1,6 @@
 package android.testnavigation;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.testnavigation.Requests.AppController;
 import android.testnavigation.Requests.JsonObjectIdPutRequest;
 import android.testnavigation.Requests.JsonObjectIdRequest;
+import android.testnavigation.Requests.SockHandle;
+import android.testnavigation.fragments.MyOffersWindow;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,9 +30,13 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+
+import io.socket.client.Ack;
 
 public class EditOfferScreen extends AppCompatActivity {
     private String objeeectId;
@@ -38,6 +45,10 @@ public class EditOfferScreen extends AppCompatActivity {
     private ProgressDialog pDialog;
     private AlertDialog.Builder myAlert;
     private Offer editedOffer;
+    private SockHandle socket;
+    private String mainCategory;
+    private String category;
+    private String ownerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,7 @@ public class EditOfferScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        socket = null;
 
         myAlert = new AlertDialog.Builder(this);
 
@@ -64,16 +76,18 @@ public class EditOfferScreen extends AppCompatActivity {
             }
         });
 
-        loadEditedItems();
+        //loadEditedItems();
+        loadDataFromServer(objeeectId);
         Button update = (Button) findViewById(R.id.updateButton);
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+//                InputMethodManager inputManager = (InputMethodManager)
+//                        getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+//                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
 
-                editOffer(objeeectId, BackendlessSettings.urlJsonObjId);
+                //editOffer(objeeectId, BackendlessSettings.urlJsonObjId);
+                editDataOnServer(objeeectId);
             }
         });
 
@@ -242,6 +256,226 @@ public class EditOfferScreen extends AppCompatActivity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+    private void loadDataFromServer(String objectId){
+        showpDialog();
+        socket = new SockHandle();
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("url", "/data/TonoKasperke14/"+objectId); //username a id objektu
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        socket.getSocket().emit("get", obj, new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject) args[0];
+                JSONObject body = null;
+                Log.d("getOneInfo1", obj.toString());
+
+                try {
+                    body = obj.getJSONObject("body");
+                    Log.d("getOneInfo2", body.toString());
+                    JSONObject response = body.getJSONObject("data");
+                    editedOffer = new Offer(response.getString("name"), response.getString("locality"), response.getString("details"),
+                            Integer.parseInt(response.getString("price")), Integer.parseInt(response.getString("type")),
+                            response.getString("startDate"), response.getString("endDate"), Integer.parseInt(response.getString("maxPeople")),
+                            response.getString("imageUrl"), body.getString("id"));
+                    mainCategory = response.getString("mainCategory");
+                    category = response.getString("category");
+                    ownerId = response.getString("ownerId");
+                    Log.i("StringInfo", mainCategory+" "+category+" "+ownerId);
+                    showDataFromServer(response);
+                    hidepDialog();
+                } catch (JSONException e) {
+                    //e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void editDataOnServer(String objectId){
+        socket = new SockHandle();
+
+        JSONObject obj = new JSONObject();
+        JSONObject jsObj;
+
+        TextView txtName= (TextView) findViewById(R.id.txtTitle);
+        final StringBuilder sb = new StringBuilder(txtName.getText().length());
+        sb.append(txtName.getText());
+        editedOffer.setName(sb.toString());
+
+        TextView txtDetails = (TextView) findViewById(R.id.txtDetails);
+        final StringBuilder sb1 = new StringBuilder(txtDetails.getText().length());
+        sb1.append(txtDetails.getText());
+        editedOffer.setDetails(sb1.toString());
+
+        TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
+        final StringBuilder sb2 = new StringBuilder(txtPrice.getText().length());
+        sb2.append(txtPrice.getText());
+        editedOffer.setPrice(Integer.parseInt(sb2.toString()));
+
+        TextView txtLocality = (TextView) findViewById(R.id.txtLocality);
+        final StringBuilder sb3 = new StringBuilder(txtLocality.getText().length());
+        sb3.append(txtLocality.getText());
+        editedOffer.setLocality(sb3.toString());
+
+        TextView txtType = (TextView) findViewById(R.id.txtType);
+        final StringBuilder sb4 = new StringBuilder(txtType.getText().length());
+        sb4.append(txtType.getText());
+        int type;
+        String typp = sb4.toString();
+        Log.d("typ", "'" + typp + "'");
+        if(typp.equalsIgnoreCase("Hotel")) type = 2;
+        else if(typp.equalsIgnoreCase("Chata")) type = 1;
+        else if(typp.equalsIgnoreCase("Penzión")) type = 3;
+        else type = 4;
+        editedOffer.setType(type);
+
+        TextView txtMaxPeople = (TextView) findViewById(R.id.txtPeople);
+        final StringBuilder sb5 = new StringBuilder(txtMaxPeople.getText().length());
+        sb5.append(txtMaxPeople.getText());
+        editedOffer.setMaxPeople(Integer.parseInt(sb5.toString()));
+
+        TextView txtStartDate = (TextView) findViewById(R.id.txtStartDate);
+        final StringBuilder sb6 = new StringBuilder(txtStartDate.getText().length());
+        sb6.append(txtStartDate.getText());
+        TextView txtEndDate = (TextView) findViewById(R.id.txtEndDate);
+        final StringBuilder sb7 = new StringBuilder(txtEndDate.getText().length());
+        sb7.append(txtEndDate.getText());
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date strDate = null;
+        Date enDate = null;
+        try {
+            strDate =  df.parse(sb6.toString());
+            enDate = df.parse(sb7.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //editedOffer.setStartDate(Long.toString(strDate.getTime()));
+        //editedOffer.setEndDate(Long.toString(enDate.getTime()));
+
+        JSONObject editOfferJson = new JSONObject();
+
+        try {
+            obj.put("url", "/data/TonoKasperke14/" + objectId); //username a idobjektu
+            editOfferJson.put("startDate", Long.toString(strDate.getTime()));
+            editOfferJson.put("endDate", Long.toString(enDate.getTime()));
+            editOfferJson.put("locality", editedOffer.getLocality());
+            editOfferJson.put("type", editedOffer.getType().toString());
+            editOfferJson.put("ownerId", ownerId);
+            editOfferJson.put("price", editedOffer.getPrice().toString());
+            editOfferJson.put("imageUrl", editedOffer.getImageUrl());
+            editOfferJson.put("name", editedOffer.getName());
+            editOfferJson.put("details", editedOffer.getDetails());
+            editOfferJson.put("maxPeople", editedOffer.getMaxPeople().toString());
+            editOfferJson.put("mainCategory", mainCategory);
+            editOfferJson.put("category", category);
+            jsObj = new JSONObject();
+            jsObj.put("data", editOfferJson);
+            obj.put("data",jsObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        socket.getSocket().emit("put", obj, new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject) args[0];
+                Log.i("putInfo", obj.toString());
+                try {
+                    if(obj.getString("statusCode").equals("200")) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Ponuka úspešne upravená", Toast.LENGTH_SHORT).show();
+                                setResult(Activity.RESULT_OK);
+                                finish();
+                                hidepDialog();
+                            }
+                        });
+                    }
+                    else{
+                       runOnUiThread(new Runnable() {
+                           @Override
+                           public void run() {
+                               myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                               myAlert.setTitle("Error");
+                               myAlert.setIcon(R.drawable.error_icon);
+                               myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                   @Override
+                                   public void onClick(DialogInterface dialog, int which) {
+                                       dialog.dismiss();
+                                       finish();
+                                       hidepDialog();
+                                   }
+                               });
+                               myAlert.show();
+                           }
+                       });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void showDataFromServer(final JSONObject response){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView txtName = (TextView) findViewById(R.id.txtTitle);
+                txtName.setText(editedOffer.getName());
+                TextView txtDetails = (TextView) findViewById(R.id.txtDetails);
+                txtDetails.setText(editedOffer.getDetails());
+                TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
+                txtPrice.setText(Integer.toString(editedOffer.getPrice()));
+                TextView txtLocality = (TextView) findViewById(R.id.txtLocality);
+                txtLocality.setText(editedOffer.getLocality());
+                TextView txtMaxPeople = (TextView) findViewById(R.id.txtPeople);
+                txtMaxPeople.setText(Integer.toString(editedOffer.getMaxPeople()));
+                TextView txtType = (TextView) findViewById(R.id.txtType);
+                switch (editedOffer.getType()) {
+                    case 1:
+                        txtType.setText("Chata");
+                        break;
+                    case 2:
+                        txtType.setText("Hotel");
+                        break;
+                    case 3:
+                        txtType.setText("Penzión");
+                        break;
+                    case 4:
+                        txtType.setText("Apartmán");
+                        break;
+                    default:
+                        break;
+                }
+
+                TextView txtStartDate = (TextView) findViewById(R.id.txtStartDate);
+                TextView txtEndDate = (TextView) findViewById(R.id.txtEndDate);
+                Date start = new Date();
+                Date end = new Date();
+                try {
+                    start.setTime(Long.parseLong(response.getString("startDate")));
+                    end.setTime(Long.parseLong(response.getString("endDate")));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                java.text.DateFormat formatStart, formatEnd;
+                formatStart = new SimpleDateFormat("dd/MM/yyyy");
+                formatEnd = new SimpleDateFormat("dd/MM/yyyy");
+                String staDate = formatStart.format(start);
+                String endDate = formatEnd.format(end);
+                txtStartDate.setText(staDate);
+                txtEndDate.setText(endDate);
+            }
+        });
     }
 }
 

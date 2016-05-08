@@ -10,7 +10,7 @@
             android:id="@+id/my_offers"
             android:title="MOJE PONUKY" />
         <item
-            android:id="@+id/add_offer"
+            android:id="@+id/add_offerr"
             android:title="PRIDAŤ PONUKU" />
 
     </group>

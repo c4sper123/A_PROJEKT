@@ -37,8 +37,6 @@ public class Offer {
         return startDateStamp;
     }
 
-
-
     public String getEndDateStamp(){
         return endDateStamp;
     }

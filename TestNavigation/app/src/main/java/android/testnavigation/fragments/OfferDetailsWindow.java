@@ -345,20 +345,30 @@ public class OfferDetailsWindow extends Fragment {
                     showDetailOffer(response);
 
                 } catch (JSONException e) {
-                    //e.printStackTrace();
                     hidepDialog();
-
-                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
-                    myAlert.setTitle("Error");
-                    myAlert.setIcon(R.drawable.error_icon);
-                    myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
-                        }
-                    });
-                    myAlert.show();
+                }
+                try {
+                    if (obj.getString("statusCode").equals("200")) ;
+                    else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                                    }
+                                });
+                                myAlert.show();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
