@@ -182,7 +182,7 @@ public class OffersWindow extends Fragment{
                             "Error: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 }
-
+        // nenacitalo offers
             }
         }, new Response.ErrorListener() {
 

@@ -217,6 +217,7 @@ public class MyOffersWindow extends Fragment {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                // Nenacitalo offers
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 hidepDialog();
 
@@ -294,7 +295,7 @@ public class MyOffersWindow extends Fragment {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
-
+    // mazem Data zo servera
     private void deleteDataFromServer(final String objectId){
         final JSONObject obj = new JSONObject();
         socket = new SockHandle();

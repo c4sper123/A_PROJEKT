@@ -250,7 +250,7 @@
                 android:id="@+id/txtCategory"
                 android:layout_below="@+id/textView13"
                 android:layout_centerHorizontal="true"
-                android:hint="Kategória"/>
+                android:hint="kategória"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -270,7 +270,7 @@
                 android:id="@+id/txtSubcategory"
                 android:layout_below="@+id/textView14"
                 android:layout_centerHorizontal="true"
-                android:hint="Podkategória"/>
+                android:hint="podkategória"/>
 
             <TextView
                 android:layout_width="wrap_content"
