@@ -1,5 +1,6 @@
 package android.testnavigation;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -142,13 +143,26 @@ public class MenuActivity extends AppCompatActivity
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == 9999) && (resultCode == Activity.RESULT_OK)) {
+            android.support.v4.app.Fragment fragment = new OffersWindow();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_omg, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }
+    }
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.add_offerr) {
             Intent intent = new Intent(this, AddOfferScreen.class);
-            startActivity(intent);
+            intent.putExtra("ownerId", userId);
+            startActivityForResult(intent, 9999);
         } else if (id == R.id.offers) {
             android.support.v4.app.Fragment fragment = new OffersWindow();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

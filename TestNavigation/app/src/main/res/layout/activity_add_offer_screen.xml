@@ -296,7 +296,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pridať ponuku"
-                android:id="@+id/updateButton"
+                android:id="@+id/addButton"
                 android:layout_below="@+id/txtImageurl"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
