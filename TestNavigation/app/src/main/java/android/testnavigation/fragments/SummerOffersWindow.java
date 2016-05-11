@@ -14,7 +14,7 @@ import android.testnavigation.BackendlessSettings;
 import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.Offer;
 import android.testnavigation.R;
-import android.testnavigation.Requests.SockHandle;
+import android.testnavigation.Requests.MySocket;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +52,7 @@ public class SummerOffersWindow extends Fragment{
     private Toolbar toolbar;
     private DataPassListener mCallback;
     private TextView titleName;
-    private SockHandle socket;
+    private MySocket socket;
 
     @Nullable
     @Override
@@ -226,7 +226,7 @@ public class SummerOffersWindow extends Fragment{
     private void loadDataFromServer() {
         showpDialog();
         offersData.removeAll(offersData);
-        socket = new SockHandle();
+        socket = new MySocket();
 
         JSONObject obj = new JSONObject();
         try {
@@ -244,38 +244,67 @@ public class SummerOffersWindow extends Fragment{
                 //Log.d("getInfo", obj.toString());
                 try {
                     body = obj.getJSONObject("body");
-                    data = body.getJSONArray("data");
-                    JSONObject data1;
-                    //Log.i("getInfo",data.toString());
+                    if(obj.getString("statusCode").equals("200")) {
+                        data = body.getJSONArray("data");
+                        JSONObject data1;
+                        //Log.i("getInfo",data.toString());
 
-                    for (int i = 0; i < data.length(); i++) {
-                        data1 = data.getJSONObject(i);
-                        //Log.i("getInfoData1",data1.toString());
-                        JSONObject offerObject = data1.getJSONObject("data");
-                        //Log.i("getInfoOffer",offerObject.toString());
-                        if(offerObject.getString("mainCategory").equals("Leto")) {
-                            offersData.add(new Offer(offerObject.getString("name"), offerObject.getString("locality"), offerObject.getString("details"),
-                                    Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
-                                    offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
-                                    offerObject.getString("imageUrl"), data1.getString("id")));
+                        for (int i = 0; i < data.length(); i++) {
+                            data1 = data.getJSONObject(i);
+                            //Log.i("getInfoData1",data1.toString());
+                            JSONObject offerObject = data1.getJSONObject("data");
+                            //Log.i("getInfoOffer",offerObject.toString());
+                            if (offerObject.getString("mainCategory").equals("Leto")) {
+                                offersData.add(new Offer(offerObject.getString("name"), offerObject.getString("locality"), offerObject.getString("details"),
+                                        Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
+                                        offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
+                                        offerObject.getString("imageUrl"), data1.getString("id")));
+                            }
                         }
+                        showAllOffers();
+                        hidepDialog();
                     }
-                    showAllOffers();
+                    else if(obj.getString("statusCode").equals("400")) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Bad Request!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        loadDataFromServer();
+                                    }
+                                });
+                                hidepDialog();
+                                myAlert.show();
+                            }
+                        });
+                    }
+                    else if(obj.getString("statusCode").equals("500")) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Server error - Nepodarilo sa načítať dáta!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        loadDataFromServer();
+                                    }
+                                });
+                                hidepDialog();
+                                myAlert.show();
+                            }
+                        });
+                    }
                     hidepDialog();
                 } catch (JSONException e) {
                     hidepDialog();
-                    Log.d("getError", ":(");
-                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
-                    myAlert.setTitle("Error");
-                    myAlert.setIcon(R.drawable.error_icon);
-                    myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            loadDataFromServer();
-                        }
-                    });
-                    myAlert.show();
                 }
             }
         });

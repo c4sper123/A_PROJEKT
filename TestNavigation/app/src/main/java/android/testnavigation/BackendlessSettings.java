@@ -1,6 +1,5 @@
 package android.testnavigation;
 
-
 public class BackendlessSettings {
     public static final String AP_ID = "83106DC3-A917-1B30-FFB0-AC79EC190200";
     public static final String SECRET_KEY = "A9E111F9-EF8E-18AD-FF69-3FEBCFDA9F00";

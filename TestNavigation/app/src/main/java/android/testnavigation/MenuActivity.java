@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.testnavigation.Requests.SockHandle;
+import android.testnavigation.Requests.MySocket;
 import android.testnavigation.fragments.DataPassListener;
 import android.testnavigation.fragments.MyOffersWindow;
 import android.testnavigation.fragments.OfferDetailsWindow;
@@ -27,10 +27,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.net.URISyntaxException;
-
-import io.socket.client.IO;
-
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DataPassListener {
     private Toolbar toolbar;
@@ -40,8 +36,6 @@ public class MenuActivity extends AppCompatActivity
     private String userMail;
     private AlertDialog.Builder myAlert;
     private AlertDialog.Builder myAlert2;
-    public SockHandle socketHandler;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +100,7 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.info) {
-            myAlert.setMessage("Zľavový portál v1.0\n\nby Adrián Kasperkevič & Tomáš Vrtal\n\nMTAA © 2016").create();
+            myAlert.setMessage("Zľavový portál v2.0\n\nby Adrián Kasperkevič & Tomáš Vrtal\n\nMTAA © 2016").create();
             myAlert.setTitle("Info");
             myAlert.setIcon(R.drawable.ic_info_black_24dp);
             myAlert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
@@ -137,14 +131,11 @@ public class MenuActivity extends AppCompatActivity
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode == 9999) && (resultCode == Activity.RESULT_OK)) {
             android.support.v4.app.Fragment fragment = new OffersWindow();
@@ -215,5 +206,4 @@ public class MenuActivity extends AppCompatActivity
         ft.addToBackStack(null);
         ft.commit();
     }
-
 }

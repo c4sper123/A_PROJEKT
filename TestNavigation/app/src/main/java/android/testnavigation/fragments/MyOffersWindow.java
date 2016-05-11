@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.testnavigation.Requests.AppController;
 import android.testnavigation.BackendlessSettings;
@@ -18,7 +17,7 @@ import android.testnavigation.EditOfferScreen;
 import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.Offer;
 import android.testnavigation.R;
-import android.testnavigation.Requests.SockHandle;
+import android.testnavigation.Requests.MySocket;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +57,7 @@ public class MyOffersWindow extends Fragment {
     private TextView titleName;
     public String objeeectId;
     private ImageButton editBtn;
-    private SockHandle socket;
+    private MySocket socket;
 
     @Nullable
     @Override
@@ -83,7 +82,8 @@ public class MyOffersWindow extends Fragment {
             userId = args.getString("userId");
             Log.d(TAG, "user ID: " + userId);
         } else {
-            //chyba
+            Toast.makeText(getContext(),"Neplatné userId",Toast.LENGTH_LONG).show();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
         }
 
         //loadMyOffers(BackendlessSettings.urlJsonObj, userId);
@@ -233,11 +233,9 @@ public class MyOffersWindow extends Fragment {
                     }
                 });
                 myAlert.show();
-
             }
 
         });
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
     }
@@ -253,8 +251,7 @@ public class MyOffersWindow extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode == 9999) && (resultCode == Activity.RESULT_OK))
             loadMyDataFromServer(userId);
@@ -295,30 +292,70 @@ public class MyOffersWindow extends Fragment {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
+
     // mazem Data zo servera
     private void deleteDataFromServer(final String objectId){
         final JSONObject obj = new JSONObject();
-        socket = new SockHandle();
+        socket = new MySocket();
         showpDialog();
 
         try {
             obj.put("url", "/data/TonoKasperke14/" + objectId); //id objektu
-            Toast.makeText(getContext(),"Ponuka úspešne vymazaná",Toast.LENGTH_SHORT).show();
-            //loadMyOffers(BackendlessSettings.urlJsonObj, userId);
-            hidepDialog();
+            if(obj.getString("statusCode").equals("200")) {
+                Toast.makeText(getContext(), "Ponuka úspešne vymazaná", Toast.LENGTH_SHORT).show();
+                //loadMyOffers(BackendlessSettings.urlJsonObj, userId);
+                hidepDialog();
+            } else if(obj.getString("statusCode").equals("500")){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myAlert.setMessage("Server Error - Nepodarilo sa nadviazať spojenie so serverom!").create();
+                        myAlert.setTitle("Error");
+                        myAlert.setIcon(R.drawable.error_icon);
+                        myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                deleteDataFromServer(objectId);
+                            }
+                        });
+                        myAlert.show();
+                    }
+                });
+            } else if(obj.getString("statusCode").equals("400")){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myAlert.setMessage("Bad Request!").create();
+                        myAlert.setTitle("Error");
+                        myAlert.setIcon(R.drawable.error_icon);
+                        myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        myAlert.show();
+                    }
+                });
+            } else if(obj.getString("statusCode").equals("404")){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myAlert.setMessage("Entry not found - Nepodarilo sa nájsť ponuku na serveri!").create();
+                        myAlert.setTitle("Error");
+                        myAlert.setIcon(R.drawable.error_icon);
+                        myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        myAlert.show();
+                    }
+                });
+            }
         } catch (JSONException e) {
-            myAlert.setMessage("Nepodarilo sa vymazať ponuku!").create();
-            myAlert.setTitle("Error");
-            myAlert.setIcon(R.drawable.error_icon);
-            myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    //deleteOffer(objeeectId, BackendlessSettings.urlJsonObjId);
-                    deleteDataFromServer(objectId);
-                }
-            });
-            myAlert.show();
             hidepDialog();
         }
 
@@ -334,7 +371,7 @@ public class MyOffersWindow extends Fragment {
     private void loadMyDataFromServer(final String userId) {
         showpDialog();
         offersData.removeAll(offersData);
-        socket = new SockHandle();
+        socket = new MySocket();
 
         JSONObject obj = new JSONObject();
         try {

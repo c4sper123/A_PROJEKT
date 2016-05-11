@@ -10,11 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.testnavigation.Requests.AppController;
 import android.testnavigation.Requests.JsonObjectIdPutRequest;
 import android.testnavigation.Requests.JsonObjectIdRequest;
-import android.testnavigation.Requests.SockHandle;
-import android.testnavigation.fragments.MyOffersWindow;
+import android.testnavigation.Requests.MySocket;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -24,8 +22,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.StringRequest;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +30,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import io.socket.client.Ack;
 
@@ -45,7 +40,7 @@ public class EditOfferScreen extends AppCompatActivity {
     private ProgressDialog pDialog;
     private AlertDialog.Builder myAlert;
     private Offer editedOffer;
-    private SockHandle socket;
+    private MySocket socket;
     private String mainCategory;
     private String category;
     private String ownerId;
@@ -260,7 +255,7 @@ public class EditOfferScreen extends AppCompatActivity {
 
     private void loadDataFromServer(String objectId){
         showpDialog();
-        socket = new SockHandle();
+        socket = new MySocket();
 
         JSONObject obj = new JSONObject();
 
@@ -280,26 +275,32 @@ public class EditOfferScreen extends AppCompatActivity {
                 try {
                     body = obj.getJSONObject("body");
                     Log.d("getOneInfo2", body.toString());
-                    JSONObject response = body.getJSONObject("data");
-                    editedOffer = new Offer(response.getString("name"), response.getString("locality"), response.getString("details"),
-                            Integer.parseInt(response.getString("price")), Integer.parseInt(response.getString("type")),
-                            response.getString("startDate"), response.getString("endDate"), Integer.parseInt(response.getString("maxPeople")),
-                            response.getString("imageUrl"), body.getString("id"));
-                    mainCategory = response.getString("mainCategory");
-                    category = response.getString("category");
-                    ownerId = response.getString("ownerId");
-                    Log.i("StringInfo", mainCategory+" "+category+" "+ownerId);
-                    showDataFromServer(response);
-                    hidepDialog();
+                    if(obj.getString("statusCode").equals("200")) {
+                        JSONObject response = body.getJSONObject("data");
+                        editedOffer = new Offer(response.getString("name"), response.getString("locality"), response.getString("details"),
+                                Integer.parseInt(response.getString("price")), Integer.parseInt(response.getString("type")),
+                                response.getString("startDate"), response.getString("endDate"), Integer.parseInt(response.getString("maxPeople")),
+                                response.getString("imageUrl"), body.getString("id"));
+                        mainCategory = response.getString("mainCategory");
+                        category = response.getString("category");
+                        ownerId = response.getString("ownerId");
+                        Log.i("StringInfo", mainCategory + " " + category + " " + ownerId);
+                        showDataFromServer(response);
+                        hidepDialog();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Nepodarilo sa načítať údaje!",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 } catch (JSONException e) {
-                    //e.printStackTrace();
+                    hidepDialog();
                 }
             }
         });
     }
 
     private void editDataOnServer(String objectId){
-        socket = new SockHandle();
+        socket = new MySocket();
 
         JSONObject obj = new JSONObject();
         JSONObject jsObj;
@@ -399,12 +400,12 @@ public class EditOfferScreen extends AppCompatActivity {
                             }
                         });
                     }
-                    else{
+                    else if(obj.getString("statusCode").equals("500")){
                        runOnUiThread(new Runnable() {
                            @Override
                            public void run() {
                                myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
-                               myAlert.setTitle("Error");
+                               myAlert.setTitle("ServerError");
                                myAlert.setIcon(R.drawable.error_icon);
                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
                                    @Override
@@ -417,9 +418,45 @@ public class EditOfferScreen extends AppCompatActivity {
                                myAlert.show();
                            }
                        });
+                    } else if(obj.getString("statusCode").equals("400")){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Bad Request!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        finish();
+                                        hidepDialog();
+                                    }
+                                });
+                                myAlert.show();
+                            }
+                        });
+                    } else if(obj.getString("statusCode").equals("404")){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Entry not found - nepodarilo sa nájsť dáta na serveri!").create();
+                                myAlert.setTitle("Error - Not found");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        finish();
+                                        hidepDialog();
+                                    }
+                                });
+                                myAlert.show();
+                            }
+                        });
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    hidepDialog();
                 }
             }
         });

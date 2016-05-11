@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.testnavigation.Requests.SockHandle;
+import android.testnavigation.Requests.MySocket;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +30,7 @@ public class AddOfferScreen extends AppCompatActivity {
     private ImageButton backBtn;
     private ProgressDialog pDialog;
     private AlertDialog.Builder myAlert;
-    private SockHandle socket;
+    private MySocket socket;
     private String mainCategory;
     private String category;
     private String ownerId;
@@ -89,7 +89,7 @@ public class AddOfferScreen extends AppCompatActivity {
 
     private void addDataOnServer(){
         showpDialog();
-        socket = new SockHandle();
+        socket = new MySocket();
 
         JSONObject obj = new JSONObject();
         JSONObject jsObj;
@@ -202,11 +202,11 @@ public class AddOfferScreen extends AppCompatActivity {
                             }
                         });
                     }
-                    else{
+                    else if(obj.getString("statusCode").equals("500")){
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                                myAlert.setMessage("ServerError - Nepodarilo sa nadviazať spojenie so serverom!").create();
                                 myAlert.setTitle("Error");
                                 myAlert.setIcon(R.drawable.error_icon);
                                 myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
@@ -217,6 +217,27 @@ public class AddOfferScreen extends AppCompatActivity {
                                         hidepDialog();
                                     }
                                 });
+                                hidepDialog();
+                                myAlert.show();
+                            }
+                        });
+                    }
+                    else if(obj.getString("statusCode").equals("400")){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Error request!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        finish();
+                                        hidepDialog();
+                                    }
+                                });
+                                hidepDialog();
                                 myAlert.show();
                             }
                         });

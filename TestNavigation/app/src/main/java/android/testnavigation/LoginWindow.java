@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.testnavigation.Requests.SockHandle;
+import android.testnavigation.Requests.MySocket;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,8 +33,7 @@ import io.socket.client.IO;
 public class LoginWindow extends Activity {
     private ProgressDialog pDialog;
     private AlertDialog.Builder myAlert;
-    //private SockHandle socket;
-
+    private MySocket socket;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,34 +44,13 @@ public class LoginWindow extends Activity {
         pDialog.setCancelable(false);
         myAlert = new AlertDialog.Builder(this);
 
-
-
-
-        IO.Options opts = new IO.Options();
-        opts.secure = false;
-        opts.port = 1341;
-        opts.reconnection = true;
-        opts.forceNew = true;
-        opts.timeout = 5000;
-
-        //socket = null;
-        SockHandle socket = new SockHandle();
-        try {
-            socket.setSocket(IO.socket("http://sandbox.touch4it.com:1341/?__sails_io_sdk_version=0.12.1", opts));
-            socket.getSocket().connect();
-        }
-        catch (URISyntaxException e) {
-            //Toast.makeText(getApplicationContext(),"Nepodarilo sa pripojiť k socketu!", Toast.LENGTH_LONG).show();
-        }
-
-
+        connectSocket();
 
         //deleteDataFromServer("ec452906-e1eb-465d-a58f-1f0d918802bb");
         //updateDataOnServer();
         //postDataOnServer();
        // getDataFromServer();
         //getOneDataFromServer();
-
 
         Backendless.initApp(this, BackendlessSettings.AP_ID, BackendlessSettings.SECRET_KEY, BackendlessSettings.appVersion);
         Button logButton = (Button) findViewById(R.id.loginBtn);
@@ -156,6 +134,25 @@ public class LoginWindow extends Activity {
         return false;
     }
 
+    private void connectSocket(){
+        IO.Options opts = new IO.Options();
+        opts.secure = false;
+        opts.port = 1341;
+        opts.reconnection = true;
+        opts.forceNew = true;
+        opts.timeout = 5000;
+
+        socket = new MySocket();
+        try {
+            socket.connect(IO.socket("http://sandbox.touch4it.com:1341/?__sails_io_sdk_version=0.12.1", opts));
+            socket.getSocket().connect();
+        }
+        catch (URISyntaxException e) {
+            System.out.println("Cannot connect!");
+        }
+    }
+
+    //nepouzite - na test
     private void postDataOnServer(){
         IO.Options opts = new IO.Options();
         opts.secure = false;
@@ -164,7 +161,7 @@ public class LoginWindow extends Activity {
         opts.forceNew = true;
         opts.timeout = 5000;
 
-        SockHandle socketHandler = new SockHandle();
+        MySocket socketHandler = new MySocket();
 
         JSONObject js = new JSONObject();
         JSONObject newJs = new JSONObject();
@@ -209,9 +206,10 @@ public class LoginWindow extends Activity {
         });
     }
 
+    //nepouzite - na test
     private void deleteDataFromServer(String objectId){
         JSONObject obj = new JSONObject();
-        SockHandle socketHandler = new SockHandle();
+        MySocket socketHandler = new MySocket();
 
         try {
             obj.put("url", "/data/TonoKasperke14/" + objectId); //id objektu
@@ -228,9 +226,10 @@ public class LoginWindow extends Activity {
         });
     }
 
+    //nepouzite - na test
     private void updateDataOnServer() {
 
-        SockHandle socketHandler = new SockHandle();
+        MySocket socketHandler = new MySocket();
 
         JSONObject obj = new JSONObject();
         JSONObject jsObj;
@@ -254,8 +253,9 @@ public class LoginWindow extends Activity {
         });
     }
 
+    //nepouzite - na test
     private void getDataFromServer(){
-        SockHandle socketHandler = new SockHandle();
+        MySocket socketHandler = new MySocket();
 
         JSONObject obj = new JSONObject();
 
@@ -286,9 +286,9 @@ public class LoginWindow extends Activity {
         });
     }
 
-
+    //nepouzite - na test
     private void getOneDataFromServer(){
-        SockHandle socketHandler = new SockHandle();
+        MySocket socketHandler = new MySocket();
 
         JSONObject obj = new JSONObject();
 

@@ -8,10 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.testnavigation.Requests.AppController;
-import android.testnavigation.BackendlessSettings;
 import android.testnavigation.Requests.JsonObjectIdRequest;
 import android.testnavigation.R;
-import android.testnavigation.Requests.SockHandle;
+import android.testnavigation.Requests.MySocket;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +51,7 @@ public class OfferDetailsWindow extends Fragment {
     private Button buyBtn;
     private View rootView;
     private TextView titleName;
-    private SockHandle socket;
+    private MySocket socket;
 
     @Nullable
     @Override
@@ -319,7 +318,7 @@ public class OfferDetailsWindow extends Fragment {
 
     private void getOneDataFromServer(String objectId){
         showpDialog();
-        socket = new SockHandle();
+        socket = new MySocket();
 
         JSONObject obj = new JSONObject();
 
@@ -449,7 +448,7 @@ public class OfferDetailsWindow extends Fragment {
 
     private void getImageDetailFromServer(String objectId){
         showpDialog();
-        socket = new SockHandle();
+        socket = new MySocket();
 
         JSONObject obj = new JSONObject();
 
@@ -469,24 +468,65 @@ public class OfferDetailsWindow extends Fragment {
                 try {
                     body = obj.getJSONObject("body");
                     Log.d("getOneInfo2", body.toString());
-                    JSONObject response = body.getJSONObject("data");
-                    showDetailImageOffer(response);
-
+                    if(obj.getString("statusCode").equals("200")) {
+                        JSONObject response = body.getJSONObject("data");
+                        showDetailImageOffer(response);
+                    }
+                    else if(obj.getString("statusCode").equals("500")){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Server Error - Nepodarilo sa nadviazať spojenie so serverom!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                                    }
+                                });
+                                myAlert.show();
+                            }
+                        });
+                    } else if(obj.getString("statusCode").equals("400")){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Bad Request!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                                    }
+                                });
+                                myAlert.show();
+                            }
+                        });
+                    } else if(obj.getString("statusCode").equals("404")){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                myAlert.setMessage("Entry not found - Nepodarilo sa najsť ponuku na serveri!").create();
+                                myAlert.setTitle("Error");
+                                myAlert.setIcon(R.drawable.error_icon);
+                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                                    }
+                                });
+                                myAlert.show();
+                            }
+                        });
+                    }
                 } catch (JSONException e) {
                     //e.printStackTrace();
                     hidepDialog();
-
-                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
-                    myAlert.setTitle("Error");
-                    myAlert.setIcon(R.drawable.error_icon);
-                    myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
-                        }
-                    });
-                    myAlert.show();
                 }
             }
         });
