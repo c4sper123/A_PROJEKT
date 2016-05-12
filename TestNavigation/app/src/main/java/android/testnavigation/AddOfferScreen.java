@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.testnavigation.Requests.MySocket;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -87,166 +88,185 @@ public class AddOfferScreen extends AppCompatActivity {
             pDialog.dismiss();
     }
 
-    private void addDataOnServer(){
-        showpDialog();
-        socket = new MySocket();
-
-        JSONObject obj = new JSONObject();
-        JSONObject jsObj;
-
-        TextView txtName= (TextView) findViewById(R.id.txtTitle);
-        final StringBuilder sb = new StringBuilder(txtName.getText().length());
-        sb.append(txtName.getText());
-        name = sb.toString();
-
-        TextView txtDetails = (TextView) findViewById(R.id.txtDetails);
-        final StringBuilder sb1 = new StringBuilder(txtDetails.getText().length());
-        sb1.append(txtDetails.getText());
-        details = sb1.toString();
-
-        TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
-        final StringBuilder sb2 = new StringBuilder(txtPrice.getText().length());
-        sb2.append(txtPrice.getText());
-        price = sb2.toString();
-
-        TextView txtLocality = (TextView) findViewById(R.id.txtLocality);
-        final StringBuilder sb3 = new StringBuilder(txtLocality.getText().length());
-        sb3.append(txtLocality.getText());
-        locality = sb3.toString();
-
-        TextView txtType = (TextView) findViewById(R.id.txtType);
-        final StringBuilder sb4 = new StringBuilder(txtType.getText().length());
-        sb4.append(txtType.getText());
-        int type;
-        String typp = sb4.toString();
-        Log.d("typ", "'" + typp + "'");
-        if(typp.equalsIgnoreCase("Hotel")) type = 2;
-        else if(typp.equalsIgnoreCase("Chata")) type = 1;
-        else if(typp.equalsIgnoreCase("Penzión")) type = 3;
-        else type = 4;
-
-        TextView txtMaxPeople = (TextView) findViewById(R.id.txtPeople);
-        final StringBuilder sb5 = new StringBuilder(txtMaxPeople.getText().length());
-        sb5.append(txtMaxPeople.getText());
-        maxPeople = sb5.toString();
-
-        TextView txtStartDate = (TextView) findViewById(R.id.txtStartDate);
-        final StringBuilder sb6 = new StringBuilder(txtStartDate.getText().length());
-        sb6.append(txtStartDate.getText());
-        TextView txtEndDate = (TextView) findViewById(R.id.txtEndDate);
-        final StringBuilder sb7 = new StringBuilder(txtEndDate.getText().length());
-        sb7.append(txtEndDate.getText());
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Date strDate = null;
-        Date enDate = null;
-        try {
-            strDate =  df.parse(sb6.toString());
-            enDate = df.parse(sb7.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        TextView txtCategory = (TextView) findViewById(R.id.txtSubcategory);
-        final StringBuilder sb8 = new StringBuilder(txtCategory.getText().length());
-        sb8.append(txtCategory.getText());
-        category = sb8.toString();
-
-        TextView txtMainCategory = (TextView) findViewById(R.id.txtCategory);
-        final StringBuilder sb9 = new StringBuilder(txtMainCategory.getText().length());
-        sb9.append(txtMainCategory.getText());
-        mainCategory = sb9.toString();
-
-        TextView txtImageUrl = (TextView) findViewById(R.id.txtImageurl);
-        final StringBuilder sb10 = new StringBuilder(txtImageUrl.getText().length());
-        sb10.append(txtImageUrl.getText());
-        imageUrl = sb10.toString();
-
-        JSONObject editOfferJson = new JSONObject();
-
-        try {
-            obj.put("url", "/data/TonoKasperke14/"); //username a idobjektu
-            editOfferJson.put("startDate", Long.toString(strDate.getTime()));//
-            editOfferJson.put("endDate", Long.toString(enDate.getTime()));//
-            editOfferJson.put("locality", locality);//
-            editOfferJson.put("type", Integer.toString(type));//
-            editOfferJson.put("ownerId", ownerId);//
-            editOfferJson.put("price", price);//
-            editOfferJson.put("imageUrl", imageUrl);
-            editOfferJson.put("name", name);//
-            editOfferJson.put("details", details);//
-            editOfferJson.put("maxPeople", maxPeople);//
-            editOfferJson.put("mainCategory", mainCategory);
-            editOfferJson.put("category", category);
-            jsObj = new JSONObject();
-            jsObj.put("data", editOfferJson);
-            obj.put("data",jsObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        socket.getSocket().emit("post", obj, new Ack() {
-            @Override
-            public void call(Object... args) {
-                JSONObject obj = (JSONObject) args[0];
-                Log.i("putInfo", obj.toString());
-                try {
-                    if(obj.getString("statusCode").equals("200")) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Ponuka úspešne pridaná", Toast.LENGTH_SHORT).show();
-                                setResult(Activity.RESULT_OK);
-                                finish();
-                                hidepDialog();
-                            }
-                        });
-                    }
-                    else if(obj.getString("statusCode").equals("500")){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                myAlert.setMessage("ServerError - Nepodarilo sa nadviazať spojenie so serverom!").create();
-                                myAlert.setTitle("Error");
-                                myAlert.setIcon(R.drawable.error_icon);
-                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        finish();
-                                        hidepDialog();
-                                    }
-                                });
-                                hidepDialog();
-                                myAlert.show();
-                            }
-                        });
-                    }
-                    else if(obj.getString("statusCode").equals("400")){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                myAlert.setMessage("Error request!").create();
-                                myAlert.setTitle("Error");
-                                myAlert.setIcon(R.drawable.error_icon);
-                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        finish();
-                                        hidepDialog();
-                                    }
-                                });
-                                hidepDialog();
-                                myAlert.show();
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+    private void addDataOnServer() {
+        if (!MySocket.isNetworkConnected(getApplicationContext())) {
+            myAlert.setMessage("Chyba pripojenia na internet!").create();
+            myAlert.setTitle("Error");
+            myAlert.setIcon(R.drawable.error_icon);
+            myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    addDataOnServer();
                 }
+            });
+            hidepDialog();
+            myAlert.show();
+        } else {
+            showpDialog();
+            socket = new MySocket();
+
+            JSONObject obj = new JSONObject();
+            JSONObject jsObj;
+
+            TextView txtName = (TextView) findViewById(R.id.txtTitle);
+            final StringBuilder sb = new StringBuilder(txtName.getText().length());
+            sb.append(txtName.getText());
+            name = sb.toString();
+
+            TextView txtDetails = (TextView) findViewById(R.id.txtDetails);
+            final StringBuilder sb1 = new StringBuilder(txtDetails.getText().length());
+            sb1.append(txtDetails.getText());
+            details = sb1.toString();
+
+            TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
+            final StringBuilder sb2 = new StringBuilder(txtPrice.getText().length());
+            sb2.append(txtPrice.getText());
+            price = sb2.toString();
+
+            TextView txtLocality = (TextView) findViewById(R.id.txtLocality);
+            final StringBuilder sb3 = new StringBuilder(txtLocality.getText().length());
+            sb3.append(txtLocality.getText());
+            locality = sb3.toString();
+
+            TextView txtType = (TextView) findViewById(R.id.txtType);
+            final StringBuilder sb4 = new StringBuilder(txtType.getText().length());
+            sb4.append(txtType.getText());
+            int type;
+            String typp = sb4.toString();
+            Log.d("typ", "'" + typp + "'");
+            if (typp.equalsIgnoreCase("Hotel")) type = 2;
+            else if (typp.equalsIgnoreCase("Chata")) type = 1;
+            else if (typp.equalsIgnoreCase("Penzión")) type = 3;
+            else type = 4;
+
+            TextView txtMaxPeople = (TextView) findViewById(R.id.txtPeople);
+            final StringBuilder sb5 = new StringBuilder(txtMaxPeople.getText().length());
+            sb5.append(txtMaxPeople.getText());
+            maxPeople = sb5.toString();
+
+            TextView txtStartDate = (TextView) findViewById(R.id.txtStartDate);
+            final StringBuilder sb6 = new StringBuilder(txtStartDate.getText().length());
+            sb6.append(txtStartDate.getText());
+            TextView txtEndDate = (TextView) findViewById(R.id.txtEndDate);
+            final StringBuilder sb7 = new StringBuilder(txtEndDate.getText().length());
+            sb7.append(txtEndDate.getText());
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            Date strDate = null;
+            Date enDate = null;
+            try {
+                strDate = df.parse(sb6.toString());
+                enDate = df.parse(sb7.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        });
+
+            TextView txtCategory = (TextView) findViewById(R.id.txtSubcategory);
+            final StringBuilder sb8 = new StringBuilder(txtCategory.getText().length());
+            sb8.append(txtCategory.getText());
+            category = sb8.toString();
+
+            TextView txtMainCategory = (TextView) findViewById(R.id.txtCategory);
+            final StringBuilder sb9 = new StringBuilder(txtMainCategory.getText().length());
+            sb9.append(txtMainCategory.getText());
+            mainCategory = sb9.toString();
+
+            TextView txtImageUrl = (TextView) findViewById(R.id.txtImageurl);
+            final StringBuilder sb10 = new StringBuilder(txtImageUrl.getText().length());
+            sb10.append(txtImageUrl.getText());
+            imageUrl = sb10.toString();
+
+            JSONObject editOfferJson = new JSONObject();
+
+            if (sb.toString().isEmpty() || (sb1.toString().isEmpty()) ||
+                    (sb2.toString().isEmpty()) || (sb3.toString().isEmpty()) ||
+                    ( sb4.toString().isEmpty()) || (sb10.toString().isEmpty()) ||
+                    ( sb5.toString().isEmpty()) || (sb9.toString().isEmpty()) ||
+                   (sb6.toString().isEmpty()) || (sb8.toString().isEmpty()) ||
+                    ( sb7.toString().isEmpty())) {
+                hidepDialog();
+                Toast.makeText(getApplicationContext(), "Všetky políčka musia byť vyplnené!", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    obj.put("url", "/data/TonoKasperke14/"); //username a idobjektu
+                    editOfferJson.put("locality", locality);//
+                    editOfferJson.put("type", Integer.toString(type));//
+                    editOfferJson.put("ownerId", ownerId);//
+                    editOfferJson.put("price", price);//
+                    editOfferJson.put("imageUrl", imageUrl);
+                    editOfferJson.put("name", name);//
+                    editOfferJson.put("details", details);//
+                    editOfferJson.put("maxPeople", maxPeople);//
+                    editOfferJson.put("mainCategory", mainCategory);
+                    editOfferJson.put("category", category);
+                    editOfferJson.put("startDate", Long.toString(strDate.getTime()));//
+                    editOfferJson.put("endDate", Long.toString(enDate.getTime()));//
+                    jsObj = new JSONObject();
+                    jsObj.put("data", editOfferJson);
+                    obj.put("data", jsObj);
+                } catch (JSONException e) {
+                }
+
+                socket.getSocket().emit("post", obj, new Ack() {
+                    @Override
+                    public void call(Object... args) {
+                        JSONObject obj = (JSONObject) args[0];
+                        Log.i("putInfo", obj.toString());
+                        try {
+                            if (obj.getString("statusCode").equals("200")) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Ponuka úspešne pridaná", Toast.LENGTH_SHORT).show();
+                                        setResult(Activity.RESULT_OK);
+                                        finish();
+                                        hidepDialog();
+                                    }
+                                });
+                            } else if (obj.getString("statusCode").equals("500")) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        myAlert.setMessage("ServerError - Nepodarilo sa nadviazať spojenie so serverom!").create();
+                                        myAlert.setTitle("Error");
+                                        myAlert.setIcon(R.drawable.error_icon);
+                                        myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                hidepDialog();
+                                            }
+                                        });
+                                        hidepDialog();
+                                        myAlert.show();
+                                    }
+                                });
+                            } else if (obj.getString("statusCode").equals("400")) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        myAlert.setMessage("Error request!").create();
+                                        myAlert.setTitle("Error");
+                                        myAlert.setIcon(R.drawable.error_icon);
+                                        myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                hidepDialog();
+                                            }
+                                        });
+                                        hidepDialog();
+                                        myAlert.show();
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
     }
 
 }

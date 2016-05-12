@@ -369,72 +369,87 @@ public class MyOffersWindow extends Fragment {
     }
 
     private void loadMyDataFromServer(final String userId) {
-        showpDialog();
-        offersData.removeAll(offersData);
-        socket = new MySocket();
-
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("url", "/data/TonoKasperke14"); //username
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        socket.getSocket().emit("get", obj, new Ack() {
-            @Override
-            public void call(Object... args) {
-                JSONObject obj = (JSONObject) args[0];
-                JSONObject body = null;
-                JSONArray data = null;
-                //Log.d("getInfo", obj.toString());
-                try {
-                    body = obj.getJSONObject("body");
-                    data = body.getJSONArray("data");
-                    JSONObject data1;
-                    //Log.i("getInfo",data.toString());
-
-                    for (int i = 0; i < data.length(); i++) {
-                        data1 = data.getJSONObject(i);
-                        //Log.i("getInfoData1",data1.toString());
-                        JSONObject offerObject = data1.getJSONObject("data");
-                        //Log.i("getInfoOffer",offerObject.toString());
-                        if(offerObject.getString("ownerId").equals(userId)) {
-                            offersData.add(new Offer(offerObject.getString("name"), offerObject.getString("locality"), offerObject.getString("details"),
-                                    Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
-                                    offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
-                                    offerObject.getString("imageUrl"), data1.getString("id")));
-                        }
-                    }
-                    showAllOffers();
-                    hidepDialog();
-                } catch (JSONException e) {
-                    hidepDialog();
-                    Log.d("getError", ":(");
+        if(!MySocket.isNetworkConnected(getContext())) {
+            myAlert.setMessage("Chyba pripojenia na internet!").create();
+            myAlert.setTitle("Error");
+            myAlert.setIcon(R.drawable.error_icon);
+            myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    loadMyDataFromServer(userId);
                 }
-                try {
-                    if(obj.getString("statusCode").equals("200"));
-                    else{
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
-                                myAlert.setTitle("Error");
-                                myAlert.setIcon(R.drawable.error_icon);
-                                myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        loadMyDataFromServer(userId);
-                                    }
-                                });
-                                myAlert.show();
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            });
+            hidepDialog();
+            myAlert.show();
+        } else {
+            showpDialog();
+            offersData.removeAll(offersData);
+            socket = new MySocket();
+
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("url", "/data/TonoKasperke14"); //username
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        });
+
+            socket.getSocket().emit("get", obj, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject obj = (JSONObject) args[0];
+                    JSONObject body = null;
+                    JSONArray data = null;
+                    //Log.d("getInfo", obj.toString());
+                    try {
+                        body = obj.getJSONObject("body");
+                        data = body.getJSONArray("data");
+                        JSONObject data1;
+                        //Log.i("getInfo",data.toString());
+
+                        for (int i = 0; i < data.length(); i++) {
+                            data1 = data.getJSONObject(i);
+                            //Log.i("getInfoData1",data1.toString());
+                            JSONObject offerObject = data1.getJSONObject("data");
+                            //Log.i("getInfoOffer",offerObject.toString());
+                            if (offerObject.getString("ownerId").equals(userId)) {
+                                offersData.add(new Offer(offerObject.getString("name"), offerObject.getString("locality"), offerObject.getString("details"),
+                                        Integer.parseInt(offerObject.getString("price")), Integer.parseInt(offerObject.getString("type")),
+                                        offerObject.getString("startDate"), offerObject.getString("endDate"), Integer.parseInt(offerObject.getString("maxPeople")),
+                                        offerObject.getString("imageUrl"), data1.getString("id")));
+                            }
+                        }
+                        showAllOffers();
+                        hidepDialog();
+                    } catch (JSONException e) {
+                        hidepDialog();
+                        Log.d("getError", ":(");
+                    }
+                    try {
+                        if (obj.getString("statusCode").equals("200")) ;
+                        else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                                    myAlert.setTitle("Error");
+                                    myAlert.setIcon(R.drawable.error_icon);
+                                    myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            loadMyDataFromServer(userId);
+                                        }
+                                    });
+                                    myAlert.show();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 }

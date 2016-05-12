@@ -316,61 +316,76 @@ public class OfferDetailsWindow extends Fragment {
         });
     }
 
-    private void getOneDataFromServer(String objectId){
-        showpDialog();
-        socket = new MySocket();
-
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("url", "/data/TonoKasperke14/"+objectId); //username a id objektu
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        socket.getSocket().emit("get", obj, new Ack() {
-            @Override
-            public void call(Object... args) {
-                JSONObject obj = (JSONObject) args[0];
-                JSONObject body = null;
-                Log.d("getOneInfo1", obj.toString());
-
-                try {
-                    body = obj.getJSONObject("body");
-                    Log.d("getOneInfo2", body.toString());
-                    JSONObject response = body.getJSONObject("data");
-                    showDetailOffer(response);
-
-                } catch (JSONException e) {
-                    hidepDialog();
+    private void getOneDataFromServer(final String objectId){
+        if(!MySocket.isNetworkConnected(getContext())) {
+            myAlert.setMessage("Chyba pripojenia na internet!").create();
+            myAlert.setTitle("Error");
+            myAlert.setIcon(R.drawable.error_icon);
+            myAlert.setNegativeButton("Skúsiť znova", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    getOneDataFromServer(objectId);
                 }
-                try {
-                    if (obj.getString("statusCode").equals("200")) ;
-                    else {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
-                                myAlert.setTitle("Error");
-                                myAlert.setIcon(R.drawable.error_icon);
-                                myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
-                                    }
-                                });
-                                myAlert.show();
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            });
+            hidepDialog();
+            myAlert.show();
+        } else {
+            showpDialog();
+            socket = new MySocket();
+
+            JSONObject obj = new JSONObject();
+
+            try {
+                obj.put("url", "/data/TonoKasperke14/" + objectId); //username a id objektu
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        });
+
+            socket.getSocket().emit("get", obj, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject obj = (JSONObject) args[0];
+                    JSONObject body = null;
+                    Log.d("getOneInfo1", obj.toString());
+
+                    try {
+                        body = obj.getJSONObject("body");
+                        Log.d("getOneInfo2", body.toString());
+                        JSONObject response = body.getJSONObject("data");
+                        showDetailOffer(response);
+
+                    } catch (JSONException e) {
+                        hidepDialog();
+                    }
+                    try {
+                        if (obj.getString("statusCode").equals("200")) ;
+                        else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    myAlert.setMessage("Nepodarilo sa nadviazať spojenie so serverom!").create();
+                                    myAlert.setTitle("Error");
+                                    myAlert.setIcon(R.drawable.error_icon);
+                                    myAlert.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            getFragmentManager().popBackStackImmediate(); //návrat do predchadzajucej aktivity - OffersWindow
+                                        }
+                                    });
+                                    myAlert.show();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     private void showDetailOffer(final JSONObject response){
@@ -443,6 +458,7 @@ public class OfferDetailsWindow extends Fragment {
                 }
             }
         });
+
 
     }
 
