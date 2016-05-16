@@ -39,6 +39,9 @@ public class LoginWindow extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Overovanie...");
         pDialog.setCancelable(false);
@@ -134,6 +137,8 @@ public class LoginWindow extends Activity {
         return false;
     }
 
+
+
     private void connectSocket(){
         IO.Options opts = new IO.Options();
         opts.secure = false;
@@ -171,23 +176,23 @@ public class LoginWindow extends Activity {
             js.put("url", "/data/TonoKasperke14");
             newJs.put("startDate", "1458946800000");
             newJs.put("endDate", "1461448800000");
-            newJs.put("locality", "Južná Afrika");
-            newJs.put("type", "2");
+            newJs.put("locality", "Thajsko, Bangkok");
+            newJs.put("type", "4");
             newJs.put("ownerId", "02F4F839-7C2F-1590-FF01-7193C35E7100");
-            newJs.put("price", "2039");
-            newJs.put("imageUrl", "http://img.topky.sk/cestovky/big/1040328.jpg/Viktoriine-vodopady.jpg");
-            newJs.put("name", "Exotická dovolenka");
-            newJs.put("details", "8-dňový zájazd, v cene je zahrnuté: ubytovanie v 3* hotely s raňajkami, " +
-                    "1x obed, 2x večera, letenky, odvoz batožiny, slovenský kvalifikovaný sprievodca, vstupy," +
-                    " jazda na slonoch, návšteva Viktóriiných vodopádov");
+            newJs.put("price", "850");
+            newJs.put("imageUrl", "http://www.profitour.sk/Data/Hotel/1458/2878058.jpeg");
+            newJs.put("name", "Zájazd do Thajska ");
+            newJs.put("details", "Cena zahrňa: ubytovanie v hotely na 10 dní, letenky, poistenie, raňajky formou bufetových stolov");
             newJs.put("maxPeople", "6");
             newJs.put("mainCategory", "Leto");
-            newJs.put("category", "Výlet na lodi");
+            newJs.put("category", "Dovolenka");
             jsObj = new JSONObject().put("data", newJs);
             js.put("data",jsObj);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
 
         socketHandler.getSocket().emit("post", js, new Ack() {
             @Override

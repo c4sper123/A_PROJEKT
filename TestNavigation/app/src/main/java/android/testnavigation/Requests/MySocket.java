@@ -13,13 +13,13 @@ public class MySocket {
         MySocket.socket = socket;
     }
 
-    public static synchronized Socket getSocket(){
-        return socket;
-    }
-
     public static boolean isNetworkConnected(Context c) {
         ConnectivityManager conManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = conManager.getActiveNetworkInfo();
         return ( netInfo != null && netInfo.isConnected() );
+    }
+
+    public static synchronized Socket getSocket(){
+        return socket;
     }
 }
